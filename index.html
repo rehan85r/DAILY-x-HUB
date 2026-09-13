@@ -66,8 +66,6 @@
       margin: 0 auto;
     }
 
-    /* Header */
-
     .topbar {
       display: flex;
       align-items: center;
@@ -89,7 +87,7 @@
     }
 
     .theme-toggle {
-      width: 38px;
+      width: 54px;
       height: 38px;
       border: 1px solid var(--border);
       border-radius: 11px;
@@ -108,8 +106,6 @@
       font-weight: 600;
       text-align: right;
     }
-
-    /* Dashboard */
 
     .dashboard-grid {
       display: grid;
@@ -167,8 +163,6 @@
       font-weight: 700;
     }
 
-    /* Add Form */
-
     .add-form {
       display: grid;
       grid-template-columns: 0.8fr 1.2fr auto;
@@ -213,8 +207,6 @@
       opacity: 0.8;
     }
 
-    /* Link List */
-
     .links-list {
       flex: 1;
       display: flex;
@@ -248,13 +240,11 @@
       background: var(--soft);
       cursor: grab;
       user-select: none;
-      touch-action: pan-y;
       transition: 0.2s ease;
     }
 
     .link-item:hover {
       background: var(--hover);
-      border-color: #cfcfcf;
     }
 
     .link-item.dragging {
@@ -264,10 +254,6 @@
     .link-item.drag-over {
       border-color: var(--text);
       transform: translateY(-2px);
-    }
-
-    .link-item.touch-dragging {
-      opacity: 0.45;
     }
 
     .drag-handle {
@@ -351,8 +337,6 @@
       color: var(--danger);
     }
 
-    /* Footer */
-
     .footer {
       display: flex;
       justify-content: center;
@@ -409,8 +393,6 @@
       color: #000000;
     }
 
-    /* Tablet */
-
     @media (max-width: 1100px) {
       .dashboard-grid {
         grid-template-columns: 1fr 1fr;
@@ -426,8 +408,6 @@
         min-height: 420px;
       }
     }
-
-    /* Mobile */
 
     @media (max-width: 700px) {
       .app {
@@ -512,12 +492,7 @@
 
       <header class="topbar">
         <div class="brand-area">
-          <button
-            id="themeToggle"
-            class="theme-toggle"
-            type="button"
-            aria-label="Toggle theme"
-          >
+          <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme">
             <span id="themeIcon">☀</span>
           </button>
 
@@ -529,7 +504,6 @@
 
       <main class="dashboard-grid">
 
-        <!-- Task Hub -->
         <section class="card" data-section="task-hub">
           <div class="card-header">
             <h2 class="card-title">Task Hub</h2>
@@ -537,30 +511,14 @@
           </div>
 
           <form class="add-form" data-form="task-hub">
-            <input
-              class="input name-input"
-              type="text"
-              placeholder="Link name"
-              maxlength="60"
-              required
-            >
-
-            <input
-              class="input url-input"
-              type="text"
-              placeholder="https://example.com"
-              required
-            >
-
-            <button class="add-btn" type="submit">
-              Add Link
-            </button>
+            <input class="input name-input" type="text" placeholder="Link name" maxlength="60" required>
+            <input class="input url-input" type="text" placeholder="https://example.com" required>
+            <button class="add-btn" type="submit">Add Link</button>
           </form>
 
           <div class="links-list" id="list-task-hub"></div>
         </section>
 
-        <!-- Daily Task -->
         <section class="card" data-section="daily-task">
           <div class="card-header">
             <h2 class="card-title">Daily Task</h2>
@@ -568,33 +526,16 @@
           </div>
 
           <form class="add-form" data-form="daily-task">
-            <input
-              class="input name-input"
-              type="text"
-              placeholder="Link name"
-              maxlength="60"
-              required
-            >
-
-            <input
-              class="input url-input"
-              type="text"
-              placeholder="https://example.com"
-              required
-            >
-
-            <button class="add-btn" type="submit">
-              Add Link
-            </button>
+            <input class="input name-input" type="text" placeholder="Link name" maxlength="60" required>
+            <input class="input url-input" type="text" placeholder="https://example.com" required>
+            <button class="add-btn" type="submit">Add Link</button>
           </form>
 
           <div class="links-list" id="list-daily-task"></div>
         </section>
 
-        <!-- Right Column -->
         <div class="right-column">
 
-          <!-- Testnet -->
           <section class="card" data-section="testnet">
             <div class="card-header">
               <h2 class="card-title">Testnet</h2>
@@ -602,30 +543,14 @@
             </div>
 
             <form class="add-form" data-form="testnet">
-              <input
-                class="input name-input"
-                type="text"
-                placeholder="Link name"
-                maxlength="60"
-                required
-              >
-
-              <input
-                class="input url-input"
-                type="text"
-                placeholder="https://example.com"
-                required
-              >
-
-              <button class="add-btn" type="submit">
-                Add Link
-              </button>
+              <input class="input name-input" type="text" placeholder="Link name" maxlength="60" required>
+              <input class="input url-input" type="text" placeholder="https://example.com" required>
+              <button class="add-btn" type="submit">Add Link</button>
             </form>
 
             <div class="links-list" id="list-testnet"></div>
           </section>
 
-          <!-- Mainnet -->
           <section class="card" data-section="mainnet">
             <div class="card-header">
               <h2 class="card-title">Mainnet</h2>
@@ -633,24 +558,9 @@
             </div>
 
             <form class="add-form" data-form="mainnet">
-              <input
-                class="input name-input"
-                type="text"
-                placeholder="Link name"
-                maxlength="60"
-                required
-              >
-
-              <input
-                class="input url-input"
-                type="text"
-                placeholder="https://example.com"
-                required
-              >
-
-              <button class="add-btn" type="submit">
-                Add Link
-              </button>
+              <input class="input name-input" type="text" placeholder="Link name" maxlength="60" required>
+              <input class="input url-input" type="text" placeholder="https://example.com" required>
+              <button class="add-btn" type="submit">Add Link</button>
             </form>
 
             <div class="links-list" id="list-mainnet"></div>
@@ -659,25 +569,15 @@
         </div>
       </main>
 
-      <!-- Footer -->
       <footer class="footer">
         <div class="footer-content">
           <span>Built By</span>
 
-          <img
-            src="./rehan-dp.png"
-            alt="@Rehanx85R"
-            class="creator-dp"
-          >
+          <img src="./rehan-dp.png" alt="@Rehanx85R" class="creator-dp">
 
           <strong>@Rehanx85R</strong>
 
-          <a
-            href="https://x.com/Rehanx85R"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="follow-btn"
-          >
+          <a href="https://x.com/Rehanx85R" target="_blank" rel="noopener noreferrer" class="follow-btn">
             Follow
           </a>
         </div>
@@ -697,22 +597,19 @@
     const sections = Object.keys(STORAGE_KEYS);
 
     let draggedItem = null;
-    let touchDraggedItem = null;
 
     function getLinks(section) {
       try {
         const saved = localStorage.getItem(STORAGE_KEYS[section]);
-        return saved ? JSON.parse(saved) : [];
+        const links = saved ? JSON.parse(saved) : [];
+        return Array.isArray(links) ? links : [];
       } catch (error) {
         return [];
       }
     }
 
     function saveLinks(section, links) {
-      localStorage.setItem(
-        STORAGE_KEYS[section],
-        JSON.stringify(links)
-      );
+      localStorage.setItem(STORAGE_KEYS[section], JSON.stringify(links));
     }
 
     function titleCase(text) {
@@ -735,15 +632,12 @@
       try {
         const parsed = new URL(url);
 
-        if (
-          parsed.protocol !== "http:" &&
-          parsed.protocol !== "https:"
-        ) {
+        if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
           return "";
         }
 
         return parsed.href;
-      } catch {
+      } catch (error) {
         return "";
       }
     }
@@ -752,12 +646,10 @@
       try {
         const domain = new URL(url).hostname;
 
-        return (
-          "https://www.google.com/s2/favicons?domain=" +
+        return "https://www.google.com/s2/favicons?domain=" +
           encodeURIComponent(domain) +
-          "&sz=64"
-        );
-      } catch {
+          "&sz=64";
+      } catch (error) {
         return "";
       }
     }
@@ -777,10 +669,7 @@
 
     function renderLinks(section) {
       const list = document.getElementById("list-" + section);
-      const count = document.querySelector(
-        '[data-count="' + section + '"]'
-      );
-
+      const count = document.querySelector('[data-count="' + section + '"]');
       const links = getLinks(section);
 
       count.textContent = links.length;
@@ -798,15 +687,12 @@
         const favicon = getFaviconUrl(link.url);
 
         return `
-          <div
-            class="link-item"
-            draggable="true"
-            data-section="${section}"
-            data-index="${index}"
-          >
-            <div class="drag-handle" title="Drag to reorder">
-              ⋮⋮
-            </div>
+          <div class="link-item"
+               draggable="true"
+               data-section="${section}"
+               data-index="${index}">
+
+            <div class="drag-handle" title="Drag to reorder">⋮⋮</div>
 
             <div class="favicon-wrap">
               <img
@@ -816,55 +702,34 @@
                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
               >
 
-              <span
-                class="favicon-fallback"
-                style="display:none;"
-              >
+              <span class="favicon-fallback" style="display:none;">
                 ${escapeHtml(getInitial(link.name))}
               </span>
             </div>
 
             <div class="link-info">
-              <div
-                class="link-name"
-                title="${escapeHtml(link.name)}"
-              >
+              <div class="link-name" title="${escapeHtml(link.name)}">
                 ${escapeHtml(link.name)}
               </div>
 
-              <div
-                class="link-url"
-                title="${escapeHtml(link.url)}"
-              >
+              <div class="link-url" title="${escapeHtml(link.url)}">
                 ${escapeHtml(link.url)}
               </div>
             </div>
 
             <div class="link-actions">
-              <button
-                class="action-btn open-btn"
-                type="button"
-                data-section="${section}"
-                data-index="${index}"
-              >
+              <button class="action-btn open-btn" type="button"
+                data-section="${section}" data-index="${index}">
                 Open
               </button>
 
-              <button
-                class="action-btn edit-btn"
-                type="button"
-                data-section="${section}"
-                data-index="${index}"
-              >
+              <button class="action-btn edit-btn" type="button"
+                data-section="${section}" data-index="${index}">
                 Edit
               </button>
 
-              <button
-                class="action-btn delete-btn"
-                type="button"
-                data-section="${section}"
-                data-index="${index}"
-              >
+              <button class="action-btn delete-btn" type="button"
+                data-section="${section}" data-index="${index}">
                 Delete
               </button>
             </div>
@@ -876,22 +741,35 @@
     }
 
     function renderAll() {
-      sections.forEach(section => {
-        renderLinks(section);
-      });
+      sections.forEach(section => renderLinks(section));
     }
 
     function addLink(section, name, url) {
+      const cleanName = titleCase(name);
+      const cleanUrl = normalizeUrl(url);
+
+      if (!cleanName) {
+        alert("Please enter a link name.");
+        return false;
+      }
+
+      if (!cleanUrl) {
+        alert("Please enter a valid URL.");
+        return false;
+      }
+
       const links = getLinks(section);
 
       links.push({
         id: Date.now() + Math.random(),
-        name: titleCase(name),
-        url: url
+        name: cleanName,
+        url: cleanUrl
       });
 
       saveLinks(section, links);
       renderLinks(section);
+
+      return true;
     }
 
     function openLink(section, index) {
@@ -900,11 +778,7 @@
 
       if (!link) return;
 
-      window.open(
-        link.url,
-        "_blank",
-        "noopener,noreferrer"
-      );
+      window.open(link.url, "_blank", "noopener,noreferrer");
     }
 
     function editLink(section, index) {
@@ -913,10 +787,7 @@
 
       if (!link) return;
 
-      const newName = prompt(
-        "Edit link name:",
-        link.name
-      );
+      const newName = prompt("Edit link name:", link.name);
 
       if (newName === null) return;
 
@@ -927,10 +798,7 @@
         return;
       }
 
-      const newUrl = prompt(
-        "Edit URL:",
-        link.url
-      );
+      const newUrl = prompt("Edit URL:", link.url);
 
       if (newUrl === null) return;
 
@@ -948,4 +816,68 @@
       };
 
       saveLinks(section, links);
-      renderLinks(
+      renderLinks(section);
+    }
+
+    function deleteLink(section, index) {
+      const links = getLinks(section);
+      const link = links[index];
+
+      if (!link) return;
+
+      const confirmed = confirm(
+        `Delete "${link.name}"?`
+      );
+
+      if (!confirmed) return;
+
+      links.splice(index, 1);
+
+      saveLinks(section, links);
+      renderLinks(section);
+    }
+
+    function setupForms() {
+      document.querySelectorAll("[data-form]").forEach(form => {
+        form.addEventListener("submit", function(event) {
+          event.preventDefault();
+
+          const section = form.dataset.form;
+          const nameInput = form.querySelector(".name-input");
+          const urlInput = form.querySelector(".url-input");
+
+          const success = addLink(
+            section,
+            nameInput.value,
+            urlInput.value
+          );
+
+          if (success) {
+            nameInput.value = "";
+            urlInput.value = "";
+            nameInput.focus();
+          }
+        });
+      });
+    }
+
+    function setupActionButtons() {
+      document.addEventListener("click", function(event) {
+        const button = event.target.closest("button");
+
+        if (!button) return;
+
+        const section = button.dataset.section;
+        const index = Number(button.dataset.index);
+
+        if (!section || Number.isNaN(index)) return;
+
+        if (button.classList.contains("open-btn")) {
+          openLink(section, index);
+        }
+
+        if (button.classList.contains("edit-btn")) {
+          editLink(section, index);
+        }
+
+        if (button.classList.con
