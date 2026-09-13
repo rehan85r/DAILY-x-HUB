@@ -1,883 +1,673 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Daily Hub</title>
-
-  <style>
-    :root {
-      --bg: #f5f5f5;
-      --card: #ffffff;
-      --soft: #fafafa;
-      --text: #111111;
-      --muted: #777777;
-      --border: #e5e5e5;
-      --hover: #f0f0f0;
-      --danger: #d92d20;
-      --shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
-    }
-
-    [data-theme="dark"] {
-      --bg: #0d0d0f;
-      --card: #151517;
-      --soft: #1b1b1e;
-      --text: #f5f5f5;
-      --muted: #929292;
-      --border: #29292d;
-      --hover: #232326;
-      --danger: #ff7777;
-      --shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      min-height: 100vh;
-      background: var(--bg);
-      color: var(--text);
-      font-family: Arial, Helvetica, sans-serif;
-      transition: background 0.2s ease, color 0.2s ease;
-    }
-
-    button,
-    input {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .app {
-      width: 100%;
-      min-height: 100vh;
-      padding: 20px;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 1500px;
-      margin: 0 auto;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      gap: 15px;
-    }
-
-    .brand-area {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .brand {
-      font-size: 19px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-
-    .theme-toggle {
-      width: 54px;
-      height: 38px;
-      border: 1px solid var(--border);
-      border-radius: 11px;
-      background: var(--card);
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 17px;
-      box-shadow: var(--shadow);
-    }
-
-    .current-date {
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 600;
-      text-align: right;
-    }
-
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 0.85fr;
-      gap: 16px;
-      align-items: stretch;
-    }
-
-    .right-column {
-      display: grid;
-      grid-template-rows: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .card {
-      min-width: 0;
-      min-height: 520px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .right-column .card {
-      min-height: 252px;
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    .card-title {
-      font-size: 16px;
-      font-weight: 800;
-    }
-
-    .link-count {
-      min-width: 28px;
-      height: 24px;
-      padding: 0 8px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .add-form {
-      display: grid;
-      grid-template-columns: 0.8fr 1.2fr auto;
-      gap: 8px;
-      margin-bottom: 18px;
-    }
-
-    .input {
-      width: 100%;
-      min-width: 0;
-      height: 42px;
-      padding: 0 12px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: var(--soft);
-      color: var(--text);
-      outline: none;
-      font-size: 13px;
-    }
-
-    .input::placeholder {
-      color: var(--muted);
-    }
-
-    .input:focus {
-      border-color: var(--text);
-    }
-
-    .add-btn {
-      height: 42px;
-      padding: 0 16px;
-      border: 1px solid var(--text);
-      border-radius: 10px;
-      background: var(--text);
-      color: var(--card);
-      font-size: 13px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .add-btn:hover {
-      opacity: 0.8;
-    }
-
-    .links-list {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      min-height: 0;
-    }
-
-    .empty-state {
-      min-height: 160px;
-      flex: 1;
-      border: 1px dashed var(--border);
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: var(--muted);
-      font-size: 12px;
-      padding: 20px;
-    }
-
-    .link-item {
-      display: grid;
-      grid-template-columns: 22px 34px minmax(0, 1fr) auto;
-      align-items: center;
-      gap: 10px;
-      padding: 10px;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      background: var(--soft);
-      cursor: grab;
-      user-select: none;
-      transition: 0.2s ease;
-    }
-
-    .link-item:hover {
-      background: var(--hover);
-    }
-
-    .link-item.dragging {
-      opacity: 0.4;
-    }
-
-    .link-item.drag-over {
-      border-color: var(--text);
-      transform: translateY(-2px);
-    }
-
-    .drag-handle {
-      color: var(--muted);
-      font-size: 15px;
-      letter-spacing: -3px;
-      cursor: grab;
-      text-align: center;
-    }
-
-    .favicon-wrap {
-      width: 34px;
-      height: 34px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: var(--card);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .favicon {
-      width: 20px;
-      height: 20px;
-      object-fit: contain;
-      border-radius: 5px;
-    }
-
-    .favicon-fallback {
-      color: var(--text);
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .link-info {
-      min-width: 0;
-    }
-
-    .link-name {
-      color: var(--text);
-      font-size: 13px;
-      font-weight: 750;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-bottom: 3px;
-    }
-
-    .link-url {
-      color: var(--muted);
-      font-size: 11px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .link-actions {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .action-btn {
-      height: 30px;
-      padding: 0 9px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--card);
-      color: var(--text);
-      font-size: 11px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .action-btn:hover {
-      background: var(--hover);
-    }
-
-    .delete-btn {
-      color: var(--danger);
-    }
-
-    .footer {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-      margin-top: 24px;
-      padding: 8px 0 24px;
-    }
-
-    .footer-content {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .creator-dp {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 1px solid var(--border);
-      background: var(--card);
-    }
-
-    .footer-content strong {
-      color: var(--text);
-      font-weight: 750;
-    }
-
-    .follow-btn {
-      height: 34px;
-      padding: 0 16px;
-      border-radius: 999px;
-      background: #000000;
-      color: #ffffff;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 750;
-      transition: 0.2s ease;
-    }
-
-    .follow-btn:hover {
-      opacity: 0.8;
-      transform: translateY(-1px);
-    }
-
-    [data-theme="dark"] .follow-btn {
-      background: #ffffff;
-      color: #000000;
-    }
-
-    @media (max-width: 1100px) {
-      .dashboard-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .right-column {
-        grid-column: 1 / -1;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto;
-      }
-
-      .right-column .card {
-        min-height: 420px;
-      }
-    }
-
-    @media (max-width: 700px) {
-      .app {
-        padding: 12px;
-      }
-
-      .dashboard-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .right-column {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .card,
-      .right-column .card {
-        min-height: auto;
-        padding: 15px;
-        border-radius: 17px;
-      }
-
-      .add-form {
-        grid-template-columns: 1fr;
-        gap: 8px;
-        margin-bottom: 14px;
-      }
-
-      .input,
-      .add-btn {
-        height: 40px;
-      }
-
-      .link-item {
-        grid-template-columns: 22px 34px minmax(0, 1fr);
-      }
-
-      .link-actions {
-        grid-column: 3;
-        justify-content: flex-start;
-      }
-
-      .footer-content {
-        gap: 7px;
-        font-size: 12px;
-      }
-
-      .creator-dp {
-        width: 29px;
-        height: 29px;
-      }
-
-      .follow-btn {
-        height: 30px;
-        padding: 0 12px;
-        font-size: 11px;
-      }
-    }
-
-    @media (max-width: 380px) {
-      .footer-content {
-        gap: 5px;
-      }
-
-      .footer-content strong {
-        font-size: 11px;
-      }
-
-      .follow-btn {
-        padding: 0 9px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #FFFFFF;
+    --panel: #FFFFFF;
+    --panel-2: #F7F8FB;
+    --border: #E2E5EE;
+    --text: #1B2030;
+    --muted: #7A8199;
+    --blue: #0096FF;
+    --blue-dim: rgba(0,150,255,0.10);
+    --amber: #2dbc84;
+    --amber-dim: rgba(45,188,132,0.10);
+    --green: #f5465c;
+    --green-dim: rgba(245,70,92,0.10);
+    --purple: #FFAA33;
+    --purple-dim: rgba(255,170,51,0.10);
+    --row-h: 54px;
+    --dot-color: rgba(0,0,0,0.045);
+    --radius-lg: 14px;
+    --radius-md: 9px;
+    --shadow-sm: 0 1px 2px rgba(16,24,40,0.04), 0 1px 1px rgba(16,24,40,0.03);
+    --shadow-md: 0 4px 16px rgba(16,24,40,0.06), 0 1px 2px rgba(16,24,40,0.04);
+  }
+  body.dark{
+    --bg: #0E1320;
+    --panel: #161D2E;
+    --panel-2: #131928;
+    --border: #29314A;
+    --text: #E7EAF3;
+    --muted: #8891AC;
+    --blue: #0096FF;
+    --blue-dim: rgba(0,150,255,0.14);
+    --amber: #2dbc84;
+    --amber-dim: rgba(45,188,132,0.14);
+    --green: #f5465c;
+    --green-dim: rgba(245,70,92,0.14);
+    --purple: #FFAA33;
+    --purple-dim: rgba(255,170,51,0.14);
+    --dot-color: rgba(255,255,255,0.045);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.20), 0 1px 1px rgba(0,0,0,0.16);
+    --shadow-md: 0 6px 20px rgba(0,0,0,0.30), 0 1px 2px rgba(0,0,0,0.20);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0; max-width:100%; overflow-x:hidden;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    min-height:100vh;
+    padding:32px;
+    background-image:
+      radial-gradient(circle at 1px 1px, var(--dot-color) 1px, transparent 0),
+      radial-gradient(ellipse 900px 420px at 20% -10%, var(--blue-dim), transparent 70%);
+    background-size: 28px 28px, 100% 100%;
+    background-repeat: repeat, no-repeat;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .wrap{
+    max-width:1440px;
+    margin:0 auto;
+  }
+  header.top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:28px;
+    flex-wrap:wrap;
+    gap:14px;
+  }
+  .top-left{
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  header.top h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:29px;
+    margin:0;
+    letter-spacing:-0.025em;
+  }
+  header.top .date{
+    font-size:13px;
+    color:var(--muted);
+    font-weight:500;
+  }
+  .theme-toggle{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    border:1px solid var(--border);
+    background:var(--panel-2);
+    border-radius:20px;
+    padding:4px;
+    cursor:pointer;
+    user-select:none;
+    flex:0 0 auto;
+    box-shadow: var(--shadow-sm);
+  }
+  .theme-toggle .icon{
+    width:27px;
+    height:27px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    color:var(--text);
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+  .theme-toggle .icon.active{
+    background:var(--panel);
+    box-shadow: var(--shadow-sm);
+    transform: scale(1.04);
+  }
+  .main-layout{
+    display:flex;
+    gap:18px;
+    align-items:stretch;
+  }
+  .menu-space{
+    flex:0 0 240px;
+    display:flex;
+    flex-direction:column;
+  }
+  .menu-space .panel{
+    width:100%;
+  }
+  @media (max-width: 1300px){
+    .main-layout{ flex-direction:column; }
+    .menu-space{ flex:0 0 auto; width:100%; }
+  }
+  .grid{
+    display:grid;
+    grid-template-columns: 500px 500px;
+    gap:18px;
+    align-items:start;
+  }
+  @media (max-width: 900px){
+    .grid{ grid-template-columns: 1fr; }
+  }
+  .right-col{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    min-height:340px;
+    box-shadow:var(--shadow-sm);
+    transition: box-shadow 0.2s ease;
+  }
+  .panel:hover{
+    box-shadow:var(--shadow-md);
+  }
+  .panel::before{
+    content:"";
+    position:absolute;
+    left:0; top:0; bottom:0;
+    width:0;
+  }
+
+  .panel-head{
+    padding:17px 20px 15px 20px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--panel-2);
+  }
+  .panel-head .head-left{
+    display:flex;
+    align-items:center;
+    gap:9px;
+  }
+  .panel-head .dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    flex:0 0 auto;
+  }
+  .task .panel-head .dot{ background:var(--blue); box-shadow:0 0 0 3px var(--blue-dim); }
+  .testnet .panel-head .dot{ background:var(--amber); box-shadow:0 0 0 3px var(--amber-dim); }
+  .mainnet .panel-head .dot{ background:var(--green); box-shadow:0 0 0 3px var(--green-dim); }
+  .favdex .panel-head .dot{ background:var(--purple); box-shadow:0 0 0 3px var(--purple-dim); }
+  .panel-head .name{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:16px;
+    letter-spacing:-0.01em;
+  }
+  .panel-head .count{
+    font-size:11.5px;
+    font-weight:600;
+    color:var(--muted);
+    background:var(--panel);
+    border:1px solid var(--border);
+    padding:4px 10px;
+    border-radius:999px;
+  }
+  .task .panel-head .name{ color:var(--blue); }
+  .testnet .panel-head .name{ color:var(--amber); }
+  .mainnet .panel-head .name{ color:var(--green); }
+  .favdex .panel-head .name{ color:var(--purple); }
+
+  .add-row{
+    display:flex;
+    gap:8px;
+    padding:14px 16px;
+    border-bottom:1px solid var(--border);
+    background:var(--panel);
+  }
+  .add-row input{
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    color:var(--text);
+    border-radius:var(--radius-md);
+    padding:10px 11px;
+    font-size:13px;
+    font-family:'Inter', sans-serif;
+    outline:none;
+    min-width:0;
+    width:100%;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  }
+  .add-row input:focus{
+    border-color:var(--blue);
+    background:var(--panel);
+    box-shadow: 0 0 0 3px var(--blue-dim);
+  }
+  .add-row .name-in{ flex:0 0 34%; min-width:0; }
+  .add-row .url-in{ flex:1 1 auto; min-width:0; }
+  .add-row button{
+    flex:0 0 auto;
+    border:none;
+    border-radius:var(--radius-md);
+    padding:0 16px;
+    font-weight:600;
+    font-size:13px;
+    cursor:pointer;
+    font-family:'Space Grotesk', sans-serif;
+    box-shadow:var(--shadow-sm);
+    transition: filter 0.15s ease, transform 0.1s ease;
+  }
+  .add-row button:hover{ filter:brightness(1.07); }
+  .add-row button:active{ transform:scale(0.97); }
+  .task .add-row button{ background:var(--blue); color:#0E1320; }
+  .testnet .add-row button{ background:var(--amber); color:#0E1320; }
+  .mainnet .add-row button{ background:var(--green); color:#0E1320; }
+  .favdex .add-row button{ background:var(--purple); color:#1B2030; }
+
+  .list{
+    flex:1 1 auto;
+    min-height:100px;
+    max-height:300px;
+    overflow-y:auto;
+  }
+
+  .row{
+    height:var(--row-h);
+    display:flex;
+    align-items:center;
+    padding:0 14px 0 12px;
+    border-bottom:1px solid var(--border);
+    gap:10px;
+    transition: background-color 0.12s ease;
+  }
+  .row:hover{
+    background:var(--panel-2);
+  }
+  .row:last-child{ border-bottom:none; }
+
+  .favicon{
+    width:24px;
+    height:24px;
+    flex:0 0 auto;
+    border-radius:7px;
+    object-fit:contain;
+    background:#FFFFFF;
+    border:1px solid var(--border);
+    padding:3px;
+  }
+  .row-name{
+    color:var(--text);
+    font-size:14px;
+    font-weight:500;
+    flex:1;
+    min-width:0;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .row-actions{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    flex:0 0 auto;
+  }
+  .drag-handle{
+    flex:0 0 auto;
+    cursor:grab;
+    color:var(--muted);
+    font-size:14px;
+    line-height:1;
+    padding:4px 3px;
+    touch-action:none;
+    user-select:none;
+    opacity:0.55;
+    transition: opacity 0.15s ease;
+  }
+  .row:hover .drag-handle{ opacity:1; }
+  .row.dragging{
+    opacity:0.45;
+    background:var(--panel-2);
+  }
+  .row.drag-over{
+    border-top:2px solid var(--blue);
+  }
+
+  .row-actions button, .row-actions .open-btn{
+    border:none;
+    background:none;
+    cursor:pointer;
+    font-family:'Space Grotesk', sans-serif;
+    font-size:12px;
+    font-weight:600;
+    padding:7px 13px;
+    border-radius:7px;
+    color:var(--muted);
+    white-space:nowrap;
+    line-height:1;
+    transition: filter 0.15s ease, background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  }
+  .row-actions .open-btn{
+    color:#FFFFFF;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  }
+  .task .row-actions .open-btn{ background:var(--blue); }
+  .testnet .row-actions .open-btn{ background:var(--amber); }
+  .mainnet .row-actions .open-btn{ background:var(--green); }
+  .favdex .row-actions .open-btn{ background:var(--purple); color:#1B2030; }
+  .row-actions .open-btn:hover{ filter:brightness(1.08); }
+  .row-actions .open-btn:active{ transform:scale(0.96); }
+  .row-actions .del-btn:hover{ color:#e15b5b; background:rgba(225,91,91,0.1); }
+
+  .empty{
+    padding:20px 16px;
+    color:var(--muted);
+    font-size:13px;
+    text-align:center;
+  }
+
+  @media (max-width: 600px){
+    body{ padding:16px; }
+    header.top h1{ font-size:22px; }
+    .add-row{ flex-wrap:wrap; }
+    .add-row .name-in, .add-row .url-in{ flex:1 1 100%; }
+    .add-row button{ flex:1 1 100%; padding:9px 14px; }
+    .row{ flex-wrap:wrap; height:auto; padding:10px 12px; }
+    .row-name{ flex:1 1 auto; }
+    .row-actions{ flex:1 1 100%; justify-content:flex-end; }
+  }
+
+  footer.credit{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-top:36px;
+    padding:20px 0 6px;
+    border-top:1px solid var(--border);
+    font-family:'Inter', sans-serif;
+  }
+  footer.credit .avatar{
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    object-fit:cover;
+    border:1px solid var(--border);
+    flex:0 0 auto;
+    box-shadow:var(--shadow-sm);
+  }
+  footer.credit .built-text{
+    font-size:13px;
+    color:var(--muted);
+  }
+  footer.credit .handle{
+    font-size:13px;
+    font-weight:600;
+    color:var(--text);
+  }
+  footer.credit .follow-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    background:#000000;
+    color:#FFFFFF;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:600;
+    font-family:'Space Grotesk', sans-serif;
+    padding:6px 15px;
+    border-radius:16px;
+    border:1px solid #000000;
+    transition: opacity 0.15s ease, transform 0.1s ease;
+  }
+  footer.credit .follow-btn:hover{
+    opacity:0.8;
+    transform:translateY(-1px);
+  }
+</style>
 </head>
-
 <body>
-  <div class="app">
-    <div class="container">
+<div class="wrap">
+  <header class="top">
+    <div class="top-left">
+      <div class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Switch theme">
+        <span class="icon" id="icon-light">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="5" fill="currentColor"/>
+            <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <line x1="12" y1="1" x2="12" y2="4"/>
+              <line x1="12" y1="20" x2="12" y2="23"/>
+              <line x1="1" y1="12" x2="4" y2="12"/>
+              <line x1="20" y1="12" x2="23" y2="12"/>
+              <line x1="4.2" y1="4.2" x2="6.3" y2="6.3"/>
+              <line x1="17.7" y1="17.7" x2="19.8" y2="19.8"/>
+              <line x1="4.2" y1="19.8" x2="6.3" y2="17.7"/>
+              <line x1="17.7" y1="6.3" x2="19.8" y2="4.2"/>
+            </g>
+          </svg>
+        </span>
+        <span class="icon" id="icon-dark">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" fill="currentColor"/>
+          </svg>
+        </span>
+      </div>
+      <h1>Daily Hub</h1>
+    </div>
+    <div class="date" id="today"></div>
+  </header>
 
-      <header class="topbar">
-        <div class="brand-area">
-          <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme">
-            <span id="themeIcon">☀</span>
-          </button>
-
-          <h1 class="brand">Daily Hub</h1>
+  <div class="main-layout">
+    <div class="menu-space" id="menu-space">
+      <div class="panel favdex" id="panel-favdex">
+        <div class="panel-head">
+          <span class="head-left"><span class="dot"></span><span class="name">Task Hub</span></span>
+          <span class="count" id="count-favdex">0 links</span>
         </div>
+        <div class="add-row">
+          <input class="name-in" placeholder="Name" id="favdex-name">
+          <input class="url-in" placeholder="https://..." id="favdex-url">
+          <button onclick="addLink('favdex')">Add</button>
+        </div>
+        <div class="list" id="list-favdex"></div>
+      </div>
+    </div>
+    <div class="grid">
+      <!-- LEFT: Daily Task -->
+      <div class="panel task" id="panel-task">
+        <div class="panel-head">
+          <span class="head-left"><span class="dot"></span><span class="name">Daily Task</span></span>
+          <span class="count" id="count-task">0 links</span>
+        </div>
+        <div class="add-row">
+          <input class="name-in" placeholder="Name" id="task-name">
+          <input class="url-in" placeholder="https://..." id="task-url">
+          <button onclick="addLink('task')">Add</button>
+        </div>
+        <div class="list" id="list-task"></div>
+      </div>
 
-        <div id="currentDate" class="current-date"></div>
-      </header>
-
-      <main class="dashboard-grid">
-
-        <section class="card" data-section="task-hub">
-          <div class="card-header">
-            <h2 class="card-title">Task Hub</h2>
-            <span class="link-count" data-count="task-hub">0</span>
+      <!-- RIGHT: Testnet + Mainnet -->
+      <div class="right-col">
+        <div class="panel testnet" id="panel-testnet">
+          <div class="panel-head">
+            <span class="head-left"><span class="dot"></span><span class="name">Testnet</span></span>
+            <span class="count" id="count-testnet">0 links</span>
           </div>
-
-          <form class="add-form" data-form="task-hub">
-            <input class="input name-input" type="text" placeholder="Link name" maxlength="60" required>
-            <input class="input url-input" type="text" placeholder="https://example.com" required>
-            <button class="add-btn" type="submit">Add Link</button>
-          </form>
-
-          <div class="links-list" id="list-task-hub"></div>
-        </section>
-
-        <section class="card" data-section="daily-task">
-          <div class="card-header">
-            <h2 class="card-title">Daily Task</h2>
-            <span class="link-count" data-count="daily-task">0</span>
+          <div class="add-row">
+            <input class="name-in" placeholder="Name" id="testnet-name">
+            <input class="url-in" placeholder="https://..." id="testnet-url">
+            <button onclick="addLink('testnet')">Add</button>
           </div>
-
-          <form class="add-form" data-form="daily-task">
-            <input class="input name-input" type="text" placeholder="Link name" maxlength="60" required>
-            <input class="input url-input" type="text" placeholder="https://example.com" required>
-            <button class="add-btn" type="submit">Add Link</button>
-          </form>
-
-          <div class="links-list" id="list-daily-task"></div>
-        </section>
-
-        <div class="right-column">
-
-          <section class="card" data-section="testnet">
-            <div class="card-header">
-              <h2 class="card-title">Testnet</h2>
-              <span class="link-count" data-count="testnet">0</span>
-            </div>
-
-            <form class="add-form" data-form="testnet">
-              <input class="input name-input" type="text" placeholder="Link name" maxlength="60" required>
-              <input class="input url-input" type="text" placeholder="https://example.com" required>
-              <button class="add-btn" type="submit">Add Link</button>
-            </form>
-
-            <div class="links-list" id="list-testnet"></div>
-          </section>
-
-          <section class="card" data-section="mainnet">
-            <div class="card-header">
-              <h2 class="card-title">Mainnet</h2>
-              <span class="link-count" data-count="mainnet">0</span>
-            </div>
-
-            <form class="add-form" data-form="mainnet">
-              <input class="input name-input" type="text" placeholder="Link name" maxlength="60" required>
-              <input class="input url-input" type="text" placeholder="https://example.com" required>
-              <button class="add-btn" type="submit">Add Link</button>
-            </form>
-
-            <div class="links-list" id="list-mainnet"></div>
-          </section>
-
+          <div class="list" id="list-testnet"></div>
         </div>
-      </main>
 
-      <footer class="footer">
-        <div class="footer-content">
-          <span>Built By</span>
-
-          <img src="./rehan-dp.png" alt="@Rehanx85R" class="creator-dp">
-
-          <strong>@Rehanx85R</strong>
-
-          <a href="https://x.com/Rehanx85R" target="_blank" rel="noopener noreferrer" class="follow-btn">
-            Follow
-          </a>
+        <div class="panel mainnet" id="panel-mainnet">
+          <div class="panel-head">
+            <span class="head-left"><span class="dot"></span><span class="name">Mainnet</span></span>
+            <span class="count" id="count-mainnet">0 links</span>
+          </div>
+          <div class="add-row">
+            <input class="name-in" placeholder="Name" id="mainnet-name">
+            <input class="url-in" placeholder="https://..." id="mainnet-url">
+            <button onclick="addLink('mainnet')">Add</button>
+          </div>
+          <div class="list" id="list-mainnet"></div>
         </div>
-      </footer>
-
+      </div>
     </div>
   </div>
 
-  <script>
-    const STORAGE_KEYS = {
-      "task-hub": "dailyHub_taskHub",
-      "daily-task": "dailyHub_dailyTask",
-      "testnet": "dailyHub_testnet",
-      "mainnet": "dailyHub_mainnet"
-    };
+  <footer class="credit">
+    <span class="built-text">Built By</span>
+    <img class="avatar" src="dp.png" alt="Rehanx85R" onerror="this.onerror=null;this.src='https://unavatar.io/twitter/Rehanx85R'">
+    <span class="handle">@Rehanx85R</span>
+    <a class="follow-btn" href="https://x.com/Rehanx85R" target="_blank" rel="noopener noreferrer">Follow</a>
+  </footer>
+</div>
 
-    const sections = Object.keys(STORAGE_KEYS);
+<script>
+  const STORAGE_KEY = 'daily-hub-links-v1';
 
-    let draggedItem = null;
+  // In-memory data, hydrated from localStorage on load so links persist across visits
+  const data = {
+    task: [],
+    testnet: [],
+    mainnet: [],
+    favdex: []
+  };
 
-    function getLinks(section) {
-      try {
-        const saved = localStorage.getItem(STORAGE_KEYS[section]);
-        const links = saved ? JSON.parse(saved) : [];
-        return Array.isArray(links) ? links : [];
-      } catch (error) {
-        return [];
-      }
-    }
-
-    function saveLinks(section, links) {
-      localStorage.setItem(STORAGE_KEYS[section], JSON.stringify(links));
-    }
-
-    function titleCase(text) {
-      return text
-        .trim()
-        .replace(/\s+/g, " ")
-        .toLowerCase()
-        .replace(/\b\w/g, char => char.toUpperCase());
-    }
-
-    function normalizeUrl(value) {
-      let url = value.trim();
-
-      if (!url) return "";
-
-      if (!/^https?:\/\//i.test(url)) {
-        url = "https://" + url;
-      }
-
-      try {
-        const parsed = new URL(url);
-
-        if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
-          return "";
-        }
-
-        return parsed.href;
-      } catch (error) {
-        return "";
-      }
-    }
-
-    function getFaviconUrl(url) {
-      try {
-        const domain = new URL(url).hostname;
-
-        return "https://www.google.com/s2/favicons?domain=" +
-          encodeURIComponent(domain) +
-          "&sz=64";
-      } catch (error) {
-        return "";
-      }
-    }
-
-    function getInitial(name) {
-      return name.trim().charAt(0).toUpperCase() || "•";
-    }
-
-    function escapeHtml(value) {
-      return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    function renderLinks(section) {
-      const list = document.getElementById("list-" + section);
-      const count = document.querySelector('[data-count="' + section + '"]');
-      const links = getLinks(section);
-
-      count.textContent = links.length;
-
-      if (links.length === 0) {
-        list.innerHTML = `
-          <div class="empty-state">
-            Add your first link to this section.
-          </div>
-        `;
-        return;
-      }
-
-      list.innerHTML = links.map((link, index) => {
-        const favicon = getFaviconUrl(link.url);
-
-        return `
-          <div class="link-item"
-               draggable="true"
-               data-section="${section}"
-               data-index="${index}">
-
-            <div class="drag-handle" title="Drag to reorder">⋮⋮</div>
-
-            <div class="favicon-wrap">
-              <img
-                class="favicon"
-                src="${escapeHtml(favicon)}"
-                alt=""
-                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-              >
-
-              <span class="favicon-fallback" style="display:none;">
-                ${escapeHtml(getInitial(link.name))}
-              </span>
-            </div>
-
-            <div class="link-info">
-              <div class="link-name" title="${escapeHtml(link.name)}">
-                ${escapeHtml(link.name)}
-              </div>
-
-              <div class="link-url" title="${escapeHtml(link.url)}">
-                ${escapeHtml(link.url)}
-              </div>
-            </div>
-
-            <div class="link-actions">
-              <button class="action-btn open-btn" type="button"
-                data-section="${section}" data-index="${index}">
-                Open
-              </button>
-
-              <button class="action-btn edit-btn" type="button"
-                data-section="${section}" data-index="${index}">
-                Edit
-              </button>
-
-              <button class="action-btn delete-btn" type="button"
-                data-section="${section}" data-index="${index}">
-                Delete
-              </button>
-            </div>
-          </div>
-        `;
-      }).join("");
-
-      setupDragEvents(section);
-    }
-
-    function renderAll() {
-      sections.forEach(section => renderLinks(section));
-    }
-
-    function addLink(section, name, url) {
-      const cleanName = titleCase(name);
-      const cleanUrl = normalizeUrl(url);
-
-      if (!cleanName) {
-        alert("Please enter a link name.");
-        return false;
-      }
-
-      if (!cleanUrl) {
-        alert("Please enter a valid URL.");
-        return false;
-      }
-
-      const links = getLinks(section);
-
-      links.push({
-        id: Date.now() + Math.random(),
-        name: cleanName,
-        url: cleanUrl
+  function loadData(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return;
+      const parsed = JSON.parse(raw);
+      ['task','testnet','mainnet','favdex'].forEach(section => {
+        if(Array.isArray(parsed[section])) data[section] = parsed[section];
       });
+    }catch(e){
+      console.error('Could not load saved links:', e);
+    }
+  }
 
-      saveLinks(section, links);
-      renderLinks(section);
+  function saveData(){
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }catch(e){
+      console.error('Could not save links:', e);
+    }
+  }
 
-      return true;
+  // Tracks an in-progress drag reorder
+  let dragCtx = null; // { section, index, pointerId }
+
+  function normalizeUrl(u){
+    u = u.trim();
+    if(!u) return '';
+    if(!/^https?:\/\//i.test(u)) u = 'https://' + u;
+    return u;
+  }
+
+  function logoFor(url){
+    try{
+      const host = new URL(url).hostname.replace(/^www\./, '');
+      return `https://logo.clearbit.com/${host}`;
+    }catch(e){
+      return '';
+    }
+  }
+
+  function faviconFor(url){
+    try{
+      const host = new URL(url).hostname;
+      return `https://www.google.com/s2/favicons?sz=64&domain=${host}`;
+    }catch(e){
+      return '';
+    }
+  }
+
+  function addLink(section){
+    const nameEl = document.getElementById(section + '-name');
+    const urlEl = document.getElementById(section + '-url');
+    const name = nameEl.value.trim();
+    const url = normalizeUrl(urlEl.value);
+    if(!name || !url){
+      nameEl.style.borderColor = !name ? '#e15b5b' : 'var(--border)';
+      urlEl.style.borderColor = !url ? '#e15b5b' : 'var(--border)';
+      return;
+    }
+    data[section].push({name, url});
+    nameEl.value = '';
+    urlEl.value = '';
+    nameEl.style.borderColor = 'var(--border)';
+    urlEl.style.borderColor = 'var(--border)';
+    saveData();
+    render(section);
+  }
+
+  function removeLink(section, idx){
+    data[section].splice(idx, 1);
+    saveData();
+    render(section);
+  }
+
+  // --- Drag to reorder (works with mouse + touch via Pointer Events) ---
+  function onHandlePointerDown(ev, section, idx){
+    ev.preventDefault();
+    const handle = ev.currentTarget;
+    handle.setPointerCapture(ev.pointerId);
+    dragCtx = { section, index: idx, pointerId: ev.pointerId };
+    const row = handle.closest('.row');
+    if(row) row.classList.add('dragging');
+    document.addEventListener('pointermove', onDragPointerMove);
+    document.addEventListener('pointerup', onDragPointerUp);
+  }
+
+  function onDragPointerMove(ev){
+    if(!dragCtx) return;
+    const el = document.elementFromPoint(ev.clientX, ev.clientY);
+    const targetRow = el && el.closest ? el.closest('.row') : null;
+    if(!targetRow) return;
+    const list = document.getElementById('list-' + dragCtx.section);
+    if(!list || !list.contains(targetRow)) return;
+    const targetIdx = parseInt(targetRow.getAttribute('data-idx'), 10);
+    if(isNaN(targetIdx) || targetIdx === dragCtx.index) return;
+
+    const arr = data[dragCtx.section];
+    const [moved] = arr.splice(dragCtx.index, 1);
+    arr.splice(targetIdx, 0, moved);
+    dragCtx.index = targetIdx;
+    render(dragCtx.section);
+
+    const newRow = list.querySelector(`.row[data-idx="${targetIdx}"]`);
+    if(newRow) newRow.classList.add('dragging');
+  }
+
+  function onDragPointerUp(){
+    document.removeEventListener('pointermove', onDragPointerMove);
+    document.removeEventListener('pointerup', onDragPointerUp);
+    if(dragCtx){
+      saveData();
+      render(dragCtx.section);
+    }
+    dragCtx = null;
+  }
+
+  function render(section){
+    const list = document.getElementById('list-' + section);
+    const count = document.getElementById('count-' + section);
+    const items = data[section];
+    count.textContent = items.length + (items.length === 1 ? ' link' : ' links');
+
+    if(items.length === 0){
+      list.innerHTML = '';
+      return;
     }
 
-    function openLink(section, index) {
-      const links = getLinks(section);
-      const link = links[index];
-
-      if (!link) return;
-
-      window.open(link.url, "_blank", "noopener,noreferrer");
-    }
-
-    function editLink(section, index) {
-      const links = getLinks(section);
-      const link = links[index];
-
-      if (!link) return;
-
-      const newName = prompt("Edit link name:", link.name);
-
-      if (newName === null) return;
-
-      const cleanName = titleCase(newName);
-
-      if (!cleanName) {
-        alert("Link name cannot be empty.");
-        return;
-      }
-
-      const newUrl = prompt("Edit URL:", link.url);
-
-      if (newUrl === null) return;
-
-      const cleanUrl = normalizeUrl(newUrl);
-
-      if (!cleanUrl) {
-        alert("Please enter a valid URL.");
-        return;
-      }
-
-      links[index] = {
-        ...link,
-        name: cleanName,
-        url: cleanUrl
-      };
-
-      saveLinks(section, links);
-      renderLinks(section);
-    }
-
-    function deleteLink(section, index) {
-      const links = getLinks(section);
-      const link = links[index];
-
-      if (!link) return;
-
-      const confirmed = confirm(
-        `Delete "${link.name}"?`
-      );
-
-      if (!confirmed) return;
-
-      links.splice(index, 1);
-
-      saveLinks(section, links);
-      renderLinks(section);
-    }
-
-    function setupForms() {
-      document.querySelectorAll("[data-form]").forEach(form => {
-        form.addEventListener("submit", function(event) {
-          event.preventDefault();
-
-          const section = form.dataset.form;
-          const nameInput = form.querySelector(".name-input");
-          const urlInput = form.querySelector(".url-input");
-
-          const success = addLink(
-            section,
-            nameInput.value,
-            urlInput.value
-          );
-
-          if (success) {
-            nameInput.value = "";
-            urlInput.value = "";
-            nameInput.focus();
-          }
-        });
-      });
-    }
-
-    function setupActionButtons() {
-      document.addEventListener("click", function(event) {
-        const button = event.target.closest("button");
-
-        if (!button) return;
-
-        const section = button.dataset.section;
-        const index = Number(button.dataset.index);
-
-        if (!section || Number.isNaN(index)) return;
-
-        if (button.classList.contains("open-btn")) {
-          openLink(section, index);
-        }
-
-        if (button.classList.contains("edit-btn")) {
-          editLink(section, index);
-        }
-
-        if (button.classList.con
+    list.innerHTML = items.map((item, i) => `
+      <div class="row" data-idx="${i}">
+        <span class="drag-handle" onpointerdown="onHandlePointerDown(event, '${section}', ${i})">⠿</span>
+        <img class="favicon" src="${logoFor(item.url)}" data-fallback="${faviconFor(item.url)}" alt="" onerror="if(this.dataset.fallback && this.src!==this.dataset.fallback){this.src=this.dataset.fallback;} else {this.style.visibility='hidden';}">
+        <span class="row-name" title="${escapeAttr(item.name)}">${escapeHtml(item.name)}</span>
+        <div class="row-action
