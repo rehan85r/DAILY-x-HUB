@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Daily Hub</title>
+
+  <style>
+    :root {
+      --bg: #f5f5f5;
+      --card: #ffffff;
+      --soft: #fafafa;
+      --text: #111111;
+      --muted: #777777;
+      --border: #e5e5e5;
+      --hover: #f0f0f0;
+      --danger: #d92d20;
+      --shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0d0d0f;
+      --card: #151517;
+      --soft: #1b1b1e;
+      --text: #f5f5f5;
+      --muted: #929292;
+      --border: #29292d;
+      --hover: #232326;
+      --danger: #ff7777;
+      --shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      width: 100%;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1500px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      gap: 15px;
+    }
+
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .theme-toggle {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      background: var(--card);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      box-shadow: var(--shadow);
+    }
+
+    .current-date {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    /* Dashboard */
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 0.85fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .right-column {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .card {
+      min-width: 0;
+      min-height: 520px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .right-column .card {
+      min-height: 252px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .link-count {
+      min-width: 28px;
+      height: 24px;
+      padding: 0 8px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* Add Form */
+
+    .add-form {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr auto;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .input {
+      width: 100%;
+      min-width: 0;
+      height: 42px;
+      padding: 0 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--soft);
+      color: var(--text);
+      outline: none;
+      font-size: 13px;
+    }
+
+    .input::placeholder {
+      color: var(--muted);
+    }
+
+    .input:focus {
+      border-color: var(--text);
+    }
+
+    .add-btn {
+      height: 42px;
+      padding: 0 16px;
+      border: 1px solid var(--text);
+      border-radius: 10px;
+      background: var(--text);
+      color: var(--card);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .add-btn:hover {
+      opacity: 0.8;
+    }
+
+    /* Link List */
+
+    .links-list {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 0;
+    }
+
+    .empty-state {
+      min-height: 160px;
+      flex: 1;
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      padding: 20px;
+    }
+
+    .link-item {
+      display: grid;
+      grid-template-columns: 22px 34px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--soft);
+      cursor: grab;
+      user-select: none;
+      touch-action: pan-y;
+      transition: 0.2s ease;
+    }
+
+    .link-item:hover {
+      background: var(--hover);
+      border-color: #cfcfcf;
+    }
+
+    .link-item.dragging {
+      opacity: 0.4;
+    }
+
+    .link-item.drag-over {
+      border-color: var(--text);
+      transform: translateY(-2px);
+    }
+
+    .link-item.touch-dragging {
+      opacity: 0.45;
+    }
+
+    .drag-handle {
+      color: var(--muted);
+      font-size: 15px;
+      letter-spacing: -3px;
+      cursor: grab;
+      text-align: center;
+    }
+
+    .favicon-wrap {
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .favicon {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      border-radius: 5px;
+    }
+
+    .favicon-fallback {
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .link-info {
+      min-width: 0;
+    }
+
+    .link-name {
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 750;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 3px;
+    }
+
+    .link-url {
+      color: var(--muted);
+      font-size: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .link-actions {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .action-btn {
+      height: 30px;
+      padding: 0 9px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .action-btn:hover {
+      background: var(--hover);
+    }
+
+    .delete-btn {
+      color: var(--danger);
+    }
+
+    /* Footer */
+
+    .footer {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin-top: 24px;
+      padding: 8px 0 24px;
+    }
+
+    .footer-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .creator-dp {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      background: var(--card);
+    }
+
+    .footer-content strong {
+      color: var(--text);
+      font-weight: 750;
+    }
+
+    .follow-btn {
+      height: 34px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: #000000;
+      color: #ffffff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 750;
+      transition: 0.2s ease;
+    }
+
+    .follow-btn:hover {
+      opacity: 0.8;
+      transform: translateY(-1px);
+    }
+
+    [data-theme="dark"] .follow-btn {
+      background: #ffffff;
+      color: #000000;
+    }
+
+    /* Tablet */
+
+    @media (max-width: 1100px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .right-column {
+        grid-column: 1 / -1;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+      }
+
+      .right-column .card {
+        min-height: 420px;
+      }
+    }
+
+    /* Mobile */
+
+    @media (max-width: 700px) {
+      .app {
+        padding: 12px;
+      }
+
+      .dashboard-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .right-column {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .card,
+      .right-column .card {
+        min-height: auto;
+        padding: 15px;
+        border-radius: 17px;
+      }
+
+      .add-form {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+
+      .input,
+      .add-btn {
+        height: 40px;
+      }
+
+      .link-item {
+        grid-template-columns: 22px 34px minmax(0, 1fr);
+      }
+
+      .link-actions {
+        grid-column: 3;
+        justify-content: flex-start;
+      }
+
+      .footer-content {
+        gap: 7px;
+        font-size: 12px;
+      }
+
+      .creator-dp {
+        width: 29px;
+        height: 29px;
+      }
+
+      .follow-btn {
+        height: 30px;
+        padding: 0 12px;
+        font-size: 11px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .footer-content {
+        gap: 5px;
+      }
+
+      .footer-content strong {
+        font-size: 11px;
+      }
+
+      .follow-btn {
+        padding: 0 9px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="container">
+
+      <header class="topbar">
+        <div class="brand-area">
+          <button
+            id="themeToggle"
+            class="theme-toggle"
+            type="button"
+            aria-label="Toggle theme"
+          >
+            <span id="themeIcon">☀</span>
+          </button>
+
+          <h1 class="brand">Daily Hub</h1>
+        </div>
+
+        <div id="currentDate" class="current-date"></div>
+      </header>
+
+      <main class="dashboard-grid">
+
+        <!-- Task Hub -->
+        <section class="card" data-section="task-hub">
+          <div class="card-header">
+            <h2 class="card-title">Task Hub</h2>
+            <span class="link-count" data-count="task-hub">0</span>
+          </div>
+
+          <form class="add-form" data-form="task-hub">
+            <input
+              class="input name-input"
+              type="text"
+              placeholder="Link name"
+              maxlength="60"
+              required
+            >
+
+            <input
+              class="input url-input"
+              type="text"
+              placeholder="https://example.com"
+              required
+            >
+
+            <button class="add-btn" type="submit">
+              Add Link
+            </button>
+          </form>
+
+          <div class="links-list" id="list-task-hub"></div>
+        </section>
+
+        <!-- Daily Task -->
+        <section class="card" data-section="daily-task">
+          <div class="card-header">
+            <h2 class="card-title">Daily Task</h2>
+            <span class="link-count" data-count="daily-task">0</span>
+          </div>
+
+          <form class="add-form" data-form="daily-task">
+            <input
+              class="input name-input"
+              type="text"
+              placeholder="Link name"
+              maxlength="60"
+              required
+            >
+
+            <input
+              class="input url-input"
+              type="text"
+              placeholder="https://example.com"
+              required
+            >
+
+            <button class="add-btn" type="submit">
+              Add Link
+            </button>
+          </form>
+
+          <div class="links-list" id="list-daily-task"></div>
+        </section>
+
+        <!-- Right Column -->
+        <div class="right-column">
+
+          <!-- Testnet -->
+          <section class="card" data-section="testnet">
+            <div class="card-header">
+              <h2 class="card-title">Testnet</h2>
+              <span class="link-count" data-count="testnet">0</span>
+            </div>
+
+            <form class="add-form" data-form="testnet">
+              <input
+                class="input name-input"
+                type="text"
+                placeholder="Link name"
+                maxlength="60"
+                required
+              >
+
+              <input
+                class="input url-input"
+                type="text"
+                placeholder="https://example.com"
+                required
+              >
+
+              <button class="add-btn" type="submit">
+                Add Link
+              </button>
+            </form>
+
+            <div class="links-list" id="list-testnet"></div>
+          </section>
+
+          <!-- Mainnet -->
+          <section class="card" data-section="mainnet">
+            <div class="card-header">
+              <h2 class="card-title">Mainnet</h2>
+              <span class="link-count" data-count="mainnet">0</span>
+            </div>
+
+            <form class="add-form" data-form="mainnet">
+              <input
+                class="input name-input"
+                type="text"
+                placeholder="Link name"
+                maxlength="60"
+                required
+              >
+
+              <input
+                class="input url-input"
+                type="text"
+                placeholder="https://example.com"
+                required
+              >
+
+              <button class="add-btn" type="submit">
+                Add Link
+              </button>
+            </form>
+
+            <div class="links-list" id="list-mainnet"></div>
+          </section>
+
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="footer-content">
+          <span>Built By</span>
+
+          <img
+            src="./rehan-dp.png"
+            alt="@Rehanx85R"
+            class="creator-dp"
+          >
+
+          <strong>@Rehanx85R</strong>
+
+          <a
+            href="https://x.com/Rehanx85R"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="follow-btn"
+          >
+            Follow
+          </a>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEYS = {
+      "task-hub": "dailyHub_taskHub",
+      "daily-task": "dailyHub_dailyTask",
+      "testnet": "dailyHub_testnet",
+      "mainnet": "dailyHub_mainnet"
+    };
+
+    const sections = Object.keys(STORAGE_KEYS);
+
+    let draggedItem = null;
+    let touchDraggedItem = null;
+
+    function getLinks(section) {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEYS[section]);
+        return saved ? JSON.parse(saved) : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveLinks(section, links) {
+      localStorage.setItem(
+        STORAGE_KEYS[section],
+        JSON.stringify(links)
+      );
+    }
+
+    function titleCase(text) {
+      return text
+        .trim()
+        .replace(/\s+/g, " ")
+        .toLowerCase()
+        .replace(/\b\w/g, char => char.toUpperCase());
+    }
+
+    function normalizeUrl(value) {
+      let url = value.trim();
+
+      if (!url) return "";
+
+      if (!/^https?:\/\//i.test(url)) {
+        url = "https://" + url;
+      }
+
+      try {
+        const parsed = new URL(url);
+
+        if (
+          parsed.protocol !== "http:" &&
+          parsed.protocol !== "https:"
+        ) {
+          return "";
+        }
+
+        return parsed.href;
+      } catch {
+        return "";
+      }
+    }
+
+    function getFaviconUrl(url) {
+      try {
+        const domain = new URL(url).hostname;
+
+        return (
+          "https://www.google.com/s2/favicons?domain=" +
+          encodeURIComponent(domain) +
+          "&sz=64"
+        );
+      } catch {
+        return "";
+      }
+    }
+
+    function getInitial(name) {
+      return name.trim().charAt(0).toUpperCase() || "•";
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function renderLinks(section) {
+      const list = document.getElementById("list-" + section);
+      const count = document.querySelector(
+        '[data-count="' + section + '"]'
+      );
+
+      const links = getLinks(section);
+
+      count.textContent = links.length;
+
+      if (links.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            Add your first link to this section.
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = links.map((link, index) => {
+        const favicon = getFaviconUrl(link.url);
+
+        return `
+          <div
+            class="link-item"
+            draggable="true"
+            data-section="${section}"
+            data-index="${index}"
+          >
+            <div class="drag-handle" title="Drag to reorder">
+              ⋮⋮
+            </div>
+
+            <div class="favicon-wrap">
+              <img
+                class="favicon"
+                src="${escapeHtml(favicon)}"
+                alt=""
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+              >
+
+              <span
+                class="favicon-fallback"
+                style="display:none;"
+              >
+                ${escapeHtml(getInitial(link.name))}
+              </span>
+            </div>
+
+            <div class="link-info">
+              <div
+                class="link-name"
+                title="${escapeHtml(link.name)}"
+              >
+                ${escapeHtml(link.name)}
+              </div>
+
+              <div
+                class="link-url"
+                title="${escapeHtml(link.url)}"
+              >
+                ${escapeHtml(link.url)}
+              </div>
+            </div>
+
+            <div class="link-actions">
+              <button
+                class="action-btn open-btn"
+                type="button"
+                data-section="${section}"
+                data-index="${index}"
+              >
+                Open
+              </button>
+
+              <button
+                class="action-btn edit-btn"
+                type="button"
+                data-section="${section}"
+                data-index="${index}"
+              >
+                Edit
+              </button>
+
+              <button
+                class="action-btn delete-btn"
+                type="button"
+                data-section="${section}"
+                data-index="${index}"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      setupDragEvents(section);
+    }
+
+    function renderAll() {
+      sections.forEach(section => {
+        renderLinks(section);
+      });
+    }
+
+    function addLink(section, name, url) {
+      const links = getLinks(section);
+
+      links.push({
+        id: Date.now() + Math.random(),
+        name: titleCase(name),
+        url: url
+      });
+
+      saveLinks(section, links);
+      renderLinks(section);
+    }
+
+    function openLink(section, index) {
+      const links = getLinks(section);
+      const link = links[index];
+
+      if (!link) return;
+
+      window.open(
+        link.url,
+        "_blank",
+        "noopener,noreferrer"
+      );
+    }
+
+    function editLink(section, index) {
+      const links = getLinks(section);
+      const link = links[index];
+
+      if (!link) return;
+
+      const newName = prompt(
+        "Edit link name:",
+        link.name
+      );
+
+      if (newName === null) return;
+
+      const cleanName = titleCase(newName);
+
+      if (!cleanName) {
+        alert("Link name cannot be empty.");
+        return;
+      }
+
+      const newUrl = prompt(
+        "Edit URL:",
+        link.url
+      );
+
+      if (newUrl === null) return;
+
+      const cleanUrl = normalizeUrl(newUrl);
+
+      if (!cleanUrl) {
+        alert("Please enter a valid URL.");
+        return;
+      }
+
+      links[index] = {
+        ...link,
+        name: cleanName,
+        url: cleanUrl
+      };
+
+      saveLinks(section, links);
+      renderLinks(
