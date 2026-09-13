@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Daily Hub</title>
+<title>Daily Hub App</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -453,7 +453,7 @@
           </svg>
         </span>
       </div>
-      <h1>Daily Hub</h1>
+      <h1>Daily Hub App</h1>
     </div>
     <div class="date" id="today"></div>
   </header>
@@ -670,4 +670,4 @@
         <span class="drag-handle" onpointerdown="onHandlePointerDown(event, '${section}', ${i})">⠿</span>
         <img class="favicon" src="${logoFor(item.url)}" data-fallback="${faviconFor(item.url)}" alt="" onerror="if(this.dataset.fallback && this.src!==this.dataset.fallback){this.src=this.dataset.fallback;} else {this.style.visibility='hidden';}">
         <span class="row-name" title="${escapeAttr(item.name)}">${escapeHtml(item.name)}</span>
-        <div class="row-action
+        <div class="ro
