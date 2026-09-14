@@ -57,10 +57,22 @@
     }
 
     .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       color: #24467f;
       font-size: 25px;
       font-weight: 800;
       letter-spacing: -0.5px;
+      white-space: nowrap;
+    }
+
+    .brand-logo {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      display: block;
+      border-radius: 8px;
     }
 
     .date-text {
@@ -133,11 +145,11 @@
     }
 
     .testnet {
-      --accent: #159b8c;
+      --accent: #2dbd85;
     }
 
     .mainnet {
-      --accent: #c93ca5;
+      --accent: #f6475d;
     }
 
     /* PAGE HEADER */
@@ -297,14 +309,14 @@
     .link-buttons {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 9px;
       flex-shrink: 0;
     }
 
     .link-btn {
-      height: 28px;
-      min-width: 48px;
-      padding: 0 8px;
+      height: 30px;
+      min-width: 58px;
+      padding: 0 11px;
       border-radius: 7px;
       background: var(--accent);
       color: #ffffff;
@@ -676,6 +688,67 @@
     .backup-btn:hover { opacity:.85; }
     .backup-status { width:100%; text-align:right; color:#92a2c0; font-size:10px; }
 
+
+    /* THEME SWITCH */
+    .theme-switch { display:flex; align-items:center; gap:8px; }
+    .theme-label { color:#8999b8; font-size:11px; font-weight:700; }
+    .theme-toggle { position:relative; width:48px; height:26px; border-radius:999px; background:#dce4f2; border:1px solid #cbd6e8; padding:0; }
+    .theme-toggle::after { content:""; position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:50%; background:#fff; transition:transform .2s ease; box-shadow:0 1px 4px rgba(0,0,0,.18); }
+    .theme-toggle.active { background:#526de5; border-color:#526de5; }
+    .theme-toggle.active::after { transform:translateX(22px); }
+    .theme-toggle:focus-visible { outline:2px solid #526de5; outline-offset:3px; }
+
+    /* FOOTER */
+    .site-footer { display:flex; justify-content:center; align-items:center; padding:24px 16px 30px; }
+    .built-by { display:flex; align-items:center; justify-content:center; gap:10px; color:#8999b8; font-size:12px; font-weight:700; }
+    .built-by img { width:28px; height:28px; border-radius:50%; object-fit:cover; border:1px solid #e5eaf3; }
+    .built-by a { color:#29477f; text-decoration:none; }
+    .follow-btn { display:inline-flex; align-items:center; justify-content:center; height:32px; padding:0 14px; border-radius:8px; background:#000; color:#fff !important; font-size:11px; font-weight:800; text-decoration:none; transition:opacity .2s ease, transform .2s ease; }
+    .follow-btn:hover { opacity:.82; transform:translateY(-1px); }
+
+    /* DARK MODE */
+    body.dark-mode { --background:#10131a; --text:#edf2ff; --muted:#8d99b3; --card-border:#293244; background:var(--background); color:var(--text); }
+    body.dark-mode .top-header { background:#171b24; border-bottom-color:#293244; }
+    body.dark-mode .brand, body.dark-mode .btc-symbol, body.dark-mode .btc-price { color:#f4f7ff; }
+    body.dark-mode .date-text, body.dark-mode .theme-label { color:#9aa8c4; }
+    body.dark-mode .page-card, body.dark-mode .modal { background:#171b24; border-color:#293244; box-shadow:0 8px 25px rgba(0,0,0,.16); }
+    body.dark-mode .page-header { background:rgba(23,27,36,.8); }
+    body.dark-mode .link-item, body.dark-mode .folder-item { background:rgba(23,27,36,.85); }
+    body.dark-mode .link-name, body.dark-mode .folder-name { color:#b9c8e6; }
+    body.dark-mode .modal h2 { color:#edf2ff; }
+    body.dark-mode .form-group label { color:#a9b9d8; }
+    body.dark-mode .form-group input { background:#10131a; border-color:#344057; color:#edf2ff; }
+    body.dark-mode .cancel-btn, body.dark-mode .sync-action-btn { background:#252d3c; border-color:#344057; color:#c4d0e8; }
+    body.dark-mode .sync-note { background:#10131a; color:#9aa8c4; }
+    body.dark-mode .backup-btn { background:#171b24; border-color:#344057; color:#c4d0e8; }
+    body.dark-mode .empty-state, body.dark-mode .folder-empty { color:#71809e; }
+    body.dark-mode .built-by { color:#9aa8c4; }
+    body.dark-mode .built-by a { color:#c8d5f0; }
+    body.dark-mode .built-by img { border-color:#344057; }
+    body.dark-mode .theme-toggle { background:#344057; border-color:#46536b; }
+    body.dark-mode .theme-toggle.active { background:#526de5; border-color:#526de5; }
+
+    @media (max-width: 700px) {
+      .header-right { gap:8px; }
+      .theme-label { display:none; }
+      .theme-toggle { width:42px; height:24px; }
+      .theme-toggle::after { width:16px; height:16px; }
+      .theme-toggle.active::after { transform:translateX(18px); }
+    }
+
+    /* LIVE BTC TICKER */
+    .header-right { display:flex; align-items:center; gap:18px; }
+    .btc-ticker { display:flex; align-items:center; gap:10px; white-space:nowrap; }
+    .btc-icon { width:34px; height:34px; border-radius:50%; background:#f7931a; color:#fff; display:grid; place-items:center; font-size:24px; font-weight:800; line-height:1; }
+    .btc-symbol { color:#111; font-size:22px; font-weight:700; }
+    .btc-drop { color:#f0b90b; font-size:25px; font-weight:900; transform:translateY(-1px); }
+    .btc-price-wrap { text-align:right; line-height:1.05; min-width:125px; }
+    .btc-price { color:#111; font-size:20px; font-weight:700; }
+    .btc-usd { color:#a5a5a5; font-size:15px; margin-top:4px; }
+    .btc-change { min-width:92px; padding:12px 14px; border-radius:12px; background:#2dbb8a; color:#fff; text-align:center; font-size:20px; font-weight:700; }
+    .btc-change.down { background:#e85d75; }
+    @media (max-width: 900px) { .top-header { padding:0 20px; } .header-right { gap:10px; } .date-text { display:none; } .btc-ticker { gap:6px; } .btc-icon { width:28px; height:28px; font-size:19px; } .btc-symbol { font-size:16px; } .btc-drop { font-size:18px; } .btc-price-wrap { min-width:92px; } .btc-price { font-size:15px; } .btc-usd { font-size:11px; } .btc-change { min-width:70px; padding:9px 8px; font-size:14px; } }
+
   </style>
 </head>
 
@@ -684,9 +757,26 @@
   <div class="app">
 
     <header class="top-header">
-      <div class="brand">DAILY x HUB</div>
+      <div class="brand">
+        <img class="brand-logo" src="dxh.png" alt="DAILY x HUB logo">
+        <span>DAILY x HUB</span>
+      </div>
       <div class="header-right">
+        <div class="btc-ticker" aria-label="Live Bitcoin price">
+          <span class="btc-icon">₿</span>
+          <span class="btc-symbol">BTC</span>
+          <span class="btc-drop">◈</span>
+          <span class="btc-price-wrap">
+            <span class="btc-price" id="btcPrice">Loading...</span>
+            <span class="btc-usd" id="btcUsd">$—</span>
+          </span>
+          <span class="btc-change" id="btcChange">—</span>
+        </div>
         <div class="date-text" id="currentDate"></div>
+        <div class="theme-switch">
+          <span class="theme-label" id="themeLabel">Light</span>
+          <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to dark mode" aria-pressed="false"></button>
+        </div>
         <button type="button" class="sync-btn" id="syncBackupBtn">Sync &amp; Backup</button>
       </div>
     </header>
@@ -837,6 +927,15 @@
 
     </main>
 
+    <footer class="site-footer">
+      <div class="built-by">
+        <span>Built By</span>
+        <img src="rehan-dp.png" alt="Rehan DP">
+        <a href="https://x.com/Rehanx85R" target="_blank" rel="noopener noreferrer">@Rehanx85R</a>
+        <a class="follow-btn" href="https://x.com/Rehanx85R" target="_blank" rel="noopener noreferrer">Follow</a>
+      </div>
+    </footer>
+
   </div>
 
 
@@ -854,7 +953,7 @@
         <input
           type="text"
           id="websiteName"
-          placeholder="e.g. Axis Robotics"
+          placeholder="e.g. Link Name"
           autocomplete="off">
       </div>
 
@@ -905,7 +1004,7 @@
         <input
           type="text"
           id="folderName"
-          placeholder="e.g. Important Projects"
+          placeholder="e.g. Folder Name"
           autocomplete="off">
       </div>
 
@@ -1262,6 +1361,7 @@
       logo.src = getFavicon(link.url);
       logo.alt = link.name;
       logo.loading = "lazy";
+      logo.referrerPolicy = "no-referrer";
 
       logo.onerror = function () {
         this.style.display = "none";
@@ -2009,7 +2109,7 @@
 
     /* SYNC & BACKUP */
     function updateBackupStatus(message) {
-      const status = document.getElementById("backupStatus");
+      const status = document.getElementById("syncModalStatus");
       if (status) status.textContent = message;
     }
 
@@ -2079,16 +2179,6 @@
       reader.readAsText(file);
     }
 
-    document.getElementById("exportBackupBtn").addEventListener("click", exportBackup);
-    document.getElementById("importBackupBtn").addEventListener("click", function() {
-      document.getElementById("backupFileInput").click();
-    });
-    document.getElementById("backupFileInput").addEventListener("change", function(event) {
-      importBackup(event.target.files[0]);
-      event.target.value = "";
-    });
-
-
     /* SYNC & BACKUP MODAL */
 
     function updateSyncStatus(message) {
@@ -2126,6 +2216,49 @@
 
     document.getElementById("googleSignInBtn").addEventListener("click", function() {
       alert("Google cloud sync requires Firebase Authentication and Firestore configuration. Export and Import Backup are ready to use locally.");
+    });
+
+    /* LIVE BTC PRICE */
+    async function updateBtcTicker() {
+      const priceEl = document.getElementById("btcPrice");
+      const usdEl = document.getElementById("btcUsd");
+      const changeEl = document.getElementById("btcChange");
+      try {
+        const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd,pkr&include_24hr_change=true", { cache: "no-store" });
+        if (!response.ok) throw new Error("BTC API unavailable");
+        const btc = await response.json();
+        const usd = Number(btc.bitcoin.usd);
+        const pkr = Number(btc.bitcoin.pkr);
+        const change = Number(btc.bitcoin.usd_24h_change);
+        priceEl.textContent = usd.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        usdEl.textContent = "$" + usd.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        changeEl.textContent = (change >= 0 ? "+" : "") + change.toFixed(2) + "%";
+        changeEl.classList.toggle("down", change < 0);
+        changeEl.title = "24-hour change • PKR " + pkr.toLocaleString("en-PK", { maximumFractionDigits: 0 });
+      } catch (error) {
+        priceEl.textContent = "Unavailable";
+        usdEl.textContent = "$—";
+        changeEl.textContent = "—";
+      }
+    }
+
+    /* THEME SWITCH */
+    const themeToggle = document.getElementById("themeToggle");
+    const themeLabel = document.getElementById("themeLabel");
+
+    function applyTheme(theme) {
+      const dark = theme === "dark";
+      document.body.classList.toggle("dark-mode", dark);
+      themeToggle.classList.toggle("active", dark);
+      themeToggle.setAttribute("aria-pressed", String(dark));
+      themeToggle.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+      themeLabel.textContent = dark ? "Dark" : "Light";
+      localStorage.setItem("daily_x_hub_theme", dark ? "dark" : "light");
+    }
+
+    applyTheme(localStorage.getItem("daily_x_hub_theme") === "dark" ? "dark" : "light");
+    themeToggle.addEventListener("click", function() {
+      applyTheme(document.body.classList.contains("dark-mode") ? "light" : "dark");
     });
 
     /* INITIALIZE */
