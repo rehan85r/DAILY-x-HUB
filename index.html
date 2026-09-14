@@ -60,7 +60,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      color: #24467f;
+      color: #526de5;
       font-size: 25px;
       font-weight: 800;
       letter-spacing: -0.5px;
@@ -164,6 +164,13 @@
       background: rgba(255, 255, 255, 0.7);
       border: 1.5px solid var(--accent);
       border-radius: 13px;
+    }
+
+    /* DAILY x HUB, Task Hub, and Sync & Backup use the same brand color */
+    .brand,
+    .task-hub .page-title,
+    .sync-btn {
+      color: #526de5;
     }
 
     .page-title {
@@ -372,8 +379,12 @@
 
     .folder-actions {
       display: flex;
-      gap: 5px;
+      gap: 8px;
       flex-shrink: 0;
+    }
+
+    .folder-actions .link-btn {
+      min-width: 82px;
     }
 
     .folder-links {
@@ -586,6 +597,10 @@
       transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
+
+    .sync-btn {
+      color: #ffffff;
+    }
     .sync-btn:hover {
       opacity: 0.88;
       transform: translateY(-1px);
@@ -709,7 +724,7 @@
     /* DARK MODE */
     body.dark-mode { --background:#10131a; --text:#edf2ff; --muted:#8d99b3; --card-border:#293244; background:var(--background); color:var(--text); }
     body.dark-mode .top-header { background:#171b24; border-bottom-color:#293244; }
-    body.dark-mode .brand, body.dark-mode .btc-symbol, body.dark-mode .btc-price { color:#f4f7ff; }
+    body.dark-mode .btc-symbol, body.dark-mode .btc-price { color:#f4f7ff; }
     body.dark-mode .date-text, body.dark-mode .theme-label { color:#9aa8c4; }
     body.dark-mode .page-card, body.dark-mode .modal { background:#171b24; border-color:#293244; box-shadow:0 8px 25px rgba(0,0,0,.16); }
     body.dark-mode .page-header { background:rgba(23,27,36,.8); }
@@ -996,7 +1011,7 @@
 
     <div class="modal">
 
-      <h2>Create Folder</h2>
+      <h2 id="folderModalTitle">Create Folder</h2>
 
       <div class="form-group">
         <label for="folderName">Folder Name</label>
@@ -1078,6 +1093,7 @@
     let data = loadData();
 
     let currentSection = null;
+    let editingFolderIndex = null;
     let currentFolderIndex = null;
 
     let draggedElement = null;
@@ -1396,6 +1412,17 @@
       });
 
 
+      const editBtn = document.createElement("button");
+      editBtn.type = "button";
+      editBtn.className = "link-btn";
+      editBtn.textContent = "Edit";
+      editBtn.addEventListener("click", function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        openEditFolderModal(section, folderIndex);
+      });
+
+
       const deleteBtn = document.createElement("button");
       deleteBtn.type = "button";
       deleteBtn.className = "link-btn";
@@ -1496,6 +1523,7 @@
 
 
       actions.appendChild(addBtn);
+      actions.appendChild(editBtn);
       actions.appendChild(deleteBtn);
 
       header.appendChild(handle);
@@ -1836,13 +1864,12 @@
     function openFolderModal(section) {
 
       currentSection = section;
+      editingFolderIndex = null;
 
       const modal = document.getElementById("folderModal");
-
       const card = document.querySelector(
         `.page-card[data-section="${section}"]`
       );
-
       const accent = getComputedStyle(card)
         .getPropertyValue("--accent")
         .trim();
@@ -1851,9 +1878,9 @@
         "--modal-accent",
         accent
       );
-
+      document.getElementById("folderModalTitle").textContent = "Create Folder";
+      document.getElementById("saveFolderBtn").textContent = "Create Folder";
       document.getElementById("folderName").value = "";
-
       modal.classList.add("active");
 
       setTimeout(function() {
@@ -1863,6 +1890,38 @@
     }
 
 
+    function openEditFolderModal(section, folderIndex) {
+
+      currentSection = section;
+      editingFolderIndex = folderIndex;
+
+      const modal = document.getElementById("folderModal");
+      const card = document.querySelector(
+        `.page-card[data-section="${section}"]`
+      );
+      const accent = getComputedStyle(card)
+        .getPropertyValue("--accent")
+        .trim();
+      const folder = data[section] && data[section][folderIndex];
+
+      if (!folder) return;
+
+      modal.querySelector(".save-btn").style.setProperty(
+        "--modal-accent",
+        accent
+      );
+      document.getElementById("folderModalTitle").textContent = "Edit Folder";
+      document.getElementById("saveFolderBtn").textContent = "Save Changes";
+      document.getElementById("folderName").value = folder.name || "";
+      modal.classList.add("active");
+
+      setTimeout(function() {
+        document.getElementById("folderName").focus();
+        document.getElementById("folderName").select();
+      }, 100);
+
+    }
+
     function closeFolderModal() {
 
       document
@@ -1870,6 +1929,7 @@
         .classList.remove("active");
 
       currentSection = null;
+      editingFolderIndex = null;
 
     }
 
@@ -1886,11 +1946,15 @@
       }
 
 
-      data[currentSection].push({
-        type: "folder",
-        name: name,
-        links: []
-      });
+      if (editingFolderIndex !== null && data[currentSection]?.[editingFolderIndex]) {
+        data[currentSection][editingFolderIndex].name = name;
+      } else {
+        data[currentSection].push({
+          type: "folder",
+          name: name,
+          links: []
+        });
+      }
 
 
       saveData();
