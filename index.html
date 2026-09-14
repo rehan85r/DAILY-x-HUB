@@ -555,6 +555,104 @@
       }
     }
 
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .sync-btn {
+      height: 38px;
+      padding: 0 14px;
+      border: 1px solid #526de5;
+      border-radius: 9px;
+      background: #526de5;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .sync-btn:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+
+    .sync-modal {
+      width: min(430px, 100%);
+    }
+
+    .sync-description {
+      margin: -8px 0 18px;
+      color: #92a2c0;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .sync-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+    }
+
+    .sync-action-btn {
+      height: 42px;
+      border: 1px solid #dce4f2;
+      border-radius: 9px;
+      background: #ffffff;
+      color: #526b9c;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .sync-action-btn.primary {
+      background: #526de5;
+      border-color: #526de5;
+      color: #ffffff;
+    }
+
+    .google-btn {
+      width: 100%;
+      height: 42px;
+      margin-top: 9px;
+      border: 1px solid #dce4f2;
+      border-radius: 9px;
+      background: #ffffff;
+      color: #526b9c;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .sync-note {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 9px;
+      background: #f6f8fc;
+      color: #92a2c0;
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 560px) {
+      .top-header {
+        padding: 0 14px;
+      }
+
+      .header-right {
+        gap: 7px;
+      }
+
+      .date-text {
+        display: none;
+      }
+
+      .sync-btn {
+        padding: 0 10px;
+        font-size: 10px;
+      }
+    }
+
     /* SYNC & BACKUP */
     .backup-bar {
       display:flex;
@@ -587,7 +685,10 @@
 
     <header class="top-header">
       <div class="brand">DAILY x HUB</div>
-      <div class="date-text" id="currentDate"></div>
+      <div class="header-right">
+        <div class="date-text" id="currentDate"></div>
+        <button type="button" class="sync-btn" id="syncBackupBtn">Sync &amp; Backup</button>
+      </div>
     </header>
 
     <main class="main-content">
@@ -732,15 +833,6 @@
           <div class="items-list" id="list-dailyTask"></div>
 
         </section>
-
-
-      <div class="backup-bar" aria-label="Sync and backup">
-        <button type="button" class="backup-btn primary" id="exportBackupBtn">Export Backup</button>
-        <button type="button" class="backup-btn" id="importBackupBtn">Import Backup</button>
-        <input type="file" id="backupFileInput" accept=".json,application/json" hidden>
-        <div class="backup-status" id="backupStatus">Local data is saved automatically</div>
-      </div>
-
       </div>
 
     </main>
@@ -839,6 +931,40 @@
 
   </div>
 
+
+
+  <!-- SYNC & BACKUP MODAL -->
+  <div class="modal-overlay" id="syncModal">
+    <div class="modal sync-modal">
+      <h2>Sync &amp; Backup</h2>
+      <p class="sync-description">
+        Export your DAILY x HUB data as a backup file or import an existing backup.
+      </p>
+
+      <div class="sync-actions">
+        <button type="button" class="sync-action-btn primary" id="modalExportBackupBtn">
+          Export Backup
+        </button>
+        <button type="button" class="sync-action-btn" id="modalImportBackupBtn">
+          Import Backup
+        </button>
+      </div>
+
+      <input type="file" id="modalBackupFileInput" accept=".json,application/json" hidden>
+
+      <button type="button" class="google-btn" id="googleSignInBtn">
+        Sign In with Google
+      </button>
+
+      <div class="sync-note" id="syncModalStatus">
+        Local data is saved automatically on this device.
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="modal-btn cancel-btn" id="closeSyncBtn">Close</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     const STORAGE_KEY = "daily_x_hub_data";
@@ -1960,6 +2086,46 @@
     document.getElementById("backupFileInput").addEventListener("change", function(event) {
       importBackup(event.target.files[0]);
       event.target.value = "";
+    });
+
+
+    /* SYNC & BACKUP MODAL */
+
+    function updateSyncStatus(message) {
+      const status = document.getElementById("syncModalStatus");
+      if (status) status.textContent = message;
+      const oldStatus = document.getElementById("backupStatus");
+      if (oldStatus) oldStatus.textContent = message;
+    }
+
+    function openSyncModal() {
+      document.getElementById("syncModal").classList.add("active");
+    }
+
+    function closeSyncModal() {
+      document.getElementById("syncModal").classList.remove("active");
+    }
+
+    document.getElementById("syncBackupBtn").addEventListener("click", openSyncModal);
+    document.getElementById("closeSyncBtn").addEventListener("click", closeSyncModal);
+
+    document.getElementById("syncModal").addEventListener("click", function(event) {
+      if (event.target.id === "syncModal") closeSyncModal();
+    });
+
+    document.getElementById("modalExportBackupBtn").addEventListener("click", exportBackup);
+
+    document.getElementById("modalImportBackupBtn").addEventListener("click", function() {
+      document.getElementById("modalBackupFileInput").click();
+    });
+
+    document.getElementById("modalBackupFileInput").addEventListener("change", function(event) {
+      importBackup(event.target.files[0]);
+      event.target.value = "";
+    });
+
+    document.getElementById("googleSignInBtn").addEventListener("click", function() {
+      alert("Google cloud sync requires Firebase Authentication and Firestore configuration. Export and Import Backup are ready to use locally.");
     });
 
     /* INITIALIZE */
