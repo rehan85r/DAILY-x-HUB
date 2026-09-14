@@ -320,6 +320,13 @@
       flex-shrink: 0;
     }
 
+    .link-buttons .link-btn {
+      min-width: 44px;
+      height: 24px;
+      padding: 0 7px;
+      font-size: 8px;
+    }
+
     .link-btn {
       height: 30px;
       min-width: 58px;
@@ -351,8 +358,8 @@
     }
 
     .folder-icon {
-      width: 42px;
-      height: 42px;
+      width: 34px;
+      height: 34px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -361,8 +368,8 @@
 
     .folder-icon svg {
       display: block;
-      width: 42px;
-      height: 42px;
+      width: 34px;
+      height: 34px;
       overflow: visible;
     }
 
@@ -379,12 +386,15 @@
 
     .folder-actions {
       display: flex;
-      gap: 8px;
+      gap: 5px;
       flex-shrink: 0;
     }
 
     .folder-actions .link-btn {
-      min-width: 82px;
+      min-width: 58px;
+      height: 26px;
+      padding: 0 8px;
+      font-size: 8px;
     }
 
     .folder-links {
@@ -1412,17 +1422,6 @@
       });
 
 
-      const editBtn = document.createElement("button");
-      editBtn.type = "button";
-      editBtn.className = "link-btn";
-      editBtn.textContent = "Edit";
-      editBtn.addEventListener("click", function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        openEditFolderModal(section, folderIndex);
-      });
-
-
       const deleteBtn = document.createElement("button");
       deleteBtn.type = "button";
       deleteBtn.className = "link-btn";
@@ -1507,10 +1506,21 @@
       });
 
 
+      const editBtn = document.createElement("button");
+      editBtn.type = "button";
+      editBtn.className = "link-btn";
+      editBtn.textContent = "Edit";
+      editBtn.addEventListener("click", function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        openEditFolderModal(section, folderIndex);
+      });
+
+
       const deleteBtn = document.createElement("button");
       deleteBtn.type = "button";
       deleteBtn.className = "link-btn";
-      deleteBtn.textContent = "Delete Folder";
+      deleteBtn.textContent = "Delete";
 
       deleteBtn.addEventListener("click", function(event) {
 
