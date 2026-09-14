@@ -1,722 +1,1626 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DAILY x HUB</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg: #FFFFFF;
-    --panel: #FFFFFF;
-    --panel-2: #F7F8FB;
-    --border: #E2E5EE;
-    --text: #1B2030;
-    --muted: #7A8199;
-    --blue: #0096FF;
-    --blue-dim: rgba(0,150,255,0.10);
-    --amber: #2dbc84;
-    --amber-dim: rgba(45,188,132,0.10);
-    --green: #f5465c;
-    --green-dim: rgba(245,70,92,0.10);
-    --purple: #FFAA33;
-    --purple-dim: rgba(255,170,51,0.10);
-    --row-h: 54px;
-    --dot-color: rgba(0,0,0,0.045);
-    --radius-lg: 14px;
-    --radius-md: 9px;
-    --shadow-sm: 0 1px 2px rgba(16,24,40,0.04), 0 1px 1px rgba(16,24,40,0.03);
-    --shadow-md: 0 4px 16px rgba(16,24,40,0.06), 0 1px 2px rgba(16,24,40,0.04);
-  }
-  body.dark{
-    --bg: #0E1320;
-    --panel: #161D2E;
-    --panel-2: #131928;
-    --border: #29314A;
-    --text: #E7EAF3;
-    --muted: #8891AC;
-    --blue: #0096FF;
-    --blue-dim: rgba(0,150,255,0.14);
-    --amber: #2dbc84;
-    --amber-dim: rgba(45,188,132,0.14);
-    --green: #f5465c;
-    --green-dim: rgba(245,70,92,0.14);
-    --purple: #FFAA33;
-    --purple-dim: rgba(255,170,51,0.14);
-    --dot-color: rgba(255,255,255,0.045);
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.20), 0 1px 1px rgba(0,0,0,0.16);
-    --shadow-md: 0 6px 20px rgba(0,0,0,0.30), 0 1px 2px rgba(0,0,0,0.20);
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0; max-width:100%; overflow-x:hidden;}
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:'Inter', sans-serif;
-    min-height:100vh;
-    padding:32px;
-    background-image:
-      radial-gradient(circle at 1px 1px, var(--dot-color) 1px, transparent 0),
-      radial-gradient(ellipse 900px 420px at 20% -10%, var(--blue-dim), transparent 70%);
-    background-size: 28px 28px, 100% 100%;
-    background-repeat: repeat, no-repeat;
-    transition: background-color 0.2s ease, color 0.2s ease;
-  }
-  .wrap{
-    max-width:1440px;
-    margin:0 auto;
-  }
-  header.top{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:28px;
-    flex-wrap:wrap;
-    gap:14px;
-  }
-  .top-left{
-    display:flex;
-    align-items:center;
-    gap:16px;
-  }
-  header.top h1{
-    font-family:'Space Grotesk', sans-serif;
-    font-weight:700;
-    font-size:29px;
-    margin:0;
-    letter-spacing:-0.025em;
-  }
-  header.top .date{
-    font-size:13px;
-    color:var(--muted);
-    font-weight:500;
-  }
-  .theme-toggle{
-    display:flex;
-    align-items:center;
-    gap:7px;
-    border:1px solid var(--border);
-    background:var(--panel-2);
-    border-radius:20px;
-    padding:4px;
-    cursor:pointer;
-    user-select:none;
-    flex:0 0 auto;
-    box-shadow: var(--shadow-sm);
-  }
-  .theme-toggle .icon{
-    width:27px;
-    height:27px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:50%;
-    color:var(--text);
-    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-  }
-  .theme-toggle .icon.active{
-    background:var(--panel);
-    box-shadow: var(--shadow-sm);
-    transform: scale(1.04);
-  }
-  .main-layout{
-    display:flex;
-    gap:18px;
-    align-items:stretch;
-  }
-  .menu-space{
-    flex:0 0 240px;
-    display:flex;
-    flex-direction:column;
-  }
-  .menu-space .panel{
-    width:100%;
-  }
-  @media (max-width: 1300px){
-    .main-layout{ flex-direction:column; }
-    .menu-space{ flex:0 0 auto; width:100%; }
-  }
-  .grid{
-    display:grid;
-    grid-template-columns: 500px 500px;
-    gap:18px;
-    align-items:start;
-  }
-  @media (max-width: 900px){
-    .grid{ grid-template-columns: 1fr; }
-  }
-  .right-col{
-    display:flex;
-    flex-direction:column;
-    gap:18px;
-  }
-  .panel{
-    background:var(--panel);
-    border:1px solid var(--border);
-    border-radius:var(--radius-lg);
-    overflow:hidden;
-    display:flex;
-    flex-direction:column;
-    position:relative;
-    min-height:340px;
-    box-shadow:var(--shadow-sm);
-    transition: box-shadow 0.2s ease;
-  }
-  .panel:hover{
-    box-shadow:var(--shadow-md);
-  }
-  .panel::before{
-    content:"";
-    position:absolute;
-    left:0; top:0; bottom:0;
-    width:0;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DAILY x HUB</title>
 
-  .panel-head{
-    padding:17px 20px 15px 20px;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    background:var(--panel-2);
-  }
-  .panel-head .head-left{
-    display:flex;
-    align-items:center;
-    gap:9px;
-  }
-  .panel-head .dot{
-    width:9px;
-    height:9px;
-    border-radius:50%;
-    flex:0 0 auto;
-  }
-  .task .panel-head .dot{ background:var(--blue); box-shadow:0 0 0 3px var(--blue-dim); }
-  .testnet .panel-head .dot{ background:var(--amber); box-shadow:0 0 0 3px var(--amber-dim); }
-  .mainnet .panel-head .dot{ background:var(--green); box-shadow:0 0 0 3px var(--green-dim); }
-  .favdex .panel-head .dot{ background:var(--purple); box-shadow:0 0 0 3px var(--purple-dim); }
-  .panel-head .name{
-    font-family:'Space Grotesk', sans-serif;
-    font-weight:600;
-    font-size:16px;
-    letter-spacing:-0.01em;
-  }
-  .panel-head .count{
-    font-size:11.5px;
-    font-weight:600;
-    color:var(--muted);
-    background:var(--panel);
-    border:1px solid var(--border);
-    padding:4px 10px;
-    border-radius:999px;
-  }
-  .task .panel-head .name{ color:var(--blue); }
-  .testnet .panel-head .name{ color:var(--amber); }
-  .mainnet .panel-head .name{ color:var(--green); }
-  .favdex .panel-head .name{ color:var(--purple); }
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-  .add-row{
-    display:flex;
-    gap:8px;
-    padding:14px 16px;
-    border-bottom:1px solid var(--border);
-    background:var(--panel);
-  }
-  .add-row input{
-    background:var(--panel-2);
-    border:1px solid var(--border);
-    color:var(--text);
-    border-radius:var(--radius-md);
-    padding:10px 11px;
-    font-size:13px;
-    font-family:'Inter', sans-serif;
-    outline:none;
-    min-width:0;
-    width:100%;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
-  }
-  .add-row input:focus{
-    border-color:var(--blue);
-    background:var(--panel);
-    box-shadow: 0 0 0 3px var(--blue-dim);
-  }
-  .add-row .name-in{ flex:0 0 34%; min-width:0; }
-  .add-row .url-in{ flex:1 1 auto; min-width:0; }
-  .add-row button{
-    flex:0 0 auto;
-    border:none;
-    border-radius:var(--radius-md);
-    padding:0 16px;
-    font-weight:600;
-    font-size:13px;
-    cursor:pointer;
-    font-family:'Space Grotesk', sans-serif;
-    box-shadow:var(--shadow-sm);
-    transition: filter 0.15s ease, transform 0.1s ease;
-  }
-  .add-row button:hover{ filter:brightness(1.07); }
-  .add-row button:active{ transform:scale(0.97); }
-  .task .add-row button{ background:var(--blue); color:#0E1320; }
-  .testnet .add-row button{ background:var(--amber); color:#0E1320; }
-  .mainnet .add-row button{ background:var(--green); color:#0E1320; }
-  .favdex .add-row button{ background:var(--purple); color:#1B2030; }
+    :root {
+      --page-bg: #f5f7fc;
+      --header-bg: #ffffff;
+      --text: #29477f;
+      --muted: #91a2c3;
+    }
 
-  .list{
-    flex:1 1 auto;
-    min-height:100px;
-    max-height:300px;
-    overflow-y:auto;
-  }
+    html {
+      scroll-behavior: smooth;
+    }
 
-  .row{
-    height:var(--row-h);
-    display:flex;
-    align-items:center;
-    padding:0 14px 0 12px;
-    border-bottom:1px solid var(--border);
-    gap:10px;
-    transition: background-color 0.12s ease;
-  }
-  .row:hover{
-    background:var(--panel-2);
-  }
-  .row:last-child{ border-bottom:none; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--page-bg);
+      color: var(--text);
+    }
 
-  .favicon{
-    width:24px;
-    height:24px;
-    flex:0 0 auto;
-    border-radius:7px;
-    object-fit:contain;
-    background:#FFFFFF;
-    border:1px solid var(--border);
-    padding:3px;
-  }
-  .row-name{
-    color:var(--text);
-    font-size:14px;
-    font-weight:500;
-    flex:1;
-    min-width:0;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-  }
-  .row-actions{
-    display:flex;
-    align-items:center;
-    gap:4px;
-    flex:0 0 auto;
-  }
-  .drag-handle{
-    flex:0 0 auto;
-    cursor:grab;
-    color:var(--muted);
-    font-size:14px;
-    line-height:1;
-    padding:4px 3px;
-    touch-action:none;
-    user-select:none;
-    opacity:0.55;
-    transition: opacity 0.15s ease;
-  }
-  .row:hover .drag-handle{ opacity:1; }
-  .row.dragging{
-    opacity:0.45;
-    background:var(--panel-2);
-  }
-  .row.drag-over{
-    border-top:2px solid var(--blue);
-  }
+    button,
+    input {
+      font-family: inherit;
+    }
 
-  .row-actions button, .row-actions .open-btn{
-    border:none;
-    background:none;
-    cursor:pointer;
-    font-family:'Space Grotesk', sans-serif;
-    font-size:12px;
-    font-weight:600;
-    padding:7px 13px;
-    border-radius:7px;
-    color:var(--muted);
-    white-space:nowrap;
-    line-height:1;
-    transition: filter 0.15s ease, background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
-  }
-  .row-actions .open-btn{
-    color:#FFFFFF;
-    text-decoration:none;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
-  }
-  .task .row-actions .open-btn{ background:var(--blue); }
-  .testnet .row-actions .open-btn{ background:var(--amber); }
-  .mainnet .row-actions .open-btn{ background:var(--green); }
-  .favdex .row-actions .open-btn{ background:var(--purple); color:#1B2030; }
-  .row-actions .open-btn:hover{ filter:brightness(1.08); }
-  .row-actions .open-btn:active{ transform:scale(0.96); }
-  .row-actions .del-btn:hover{ color:#e15b5b; background:rgba(225,91,91,0.1); }
+    button {
+      cursor: pointer;
+      border: none;
+    }
 
-  .empty{
-    padding:20px 16px;
-    color:var(--muted);
-    font-size:13px;
-    text-align:center;
-  }
+    .app {
+      width: 100%;
+      min-height: 100vh;
+      background: var(--page-bg);
+    }
 
-  @media (max-width: 600px){
-    body{ padding:16px; }
-    header.top h1{ font-size:22px; }
-    .add-row{ flex-wrap:wrap; }
-    .add-row .name-in, .add-row .url-in{ flex:1 1 100%; }
-    .add-row button{ flex:1 1 100%; padding:9px 14px; }
-    .row{ flex-wrap:wrap; height:auto; padding:10px 12px; }
-    .row-name{ flex:1 1 auto; }
-    .row-actions{ flex:1 1 100%; justify-content:flex-end; }
-  }
+    .top-header {
+      height: 82px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 56px;
+      background: var(--header-bg);
+      border-bottom: 1px solid #e7ebf3;
+    }
 
-  footer.credit{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    margin-top:36px;
-    padding:20px 0 6px;
-    border-top:1px solid var(--border);
-    font-family:'Inter', sans-serif;
-  }
-  footer.credit .avatar{
-    width:28px;
-    height:28px;
-    border-radius:50%;
-    object-fit:cover;
-    border:1px solid var(--border);
-    flex:0 0 auto;
-    box-shadow:var(--shadow-sm);
-  }
-  footer.credit .built-text{
-    font-size:13px;
-    color:var(--muted);
-  }
-  footer.credit .handle{
-    font-size:13px;
-    font-weight:600;
-    color:var(--text);
-  }
-  footer.credit .follow-btn{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    background:#000000;
-    color:#FFFFFF;
-    text-decoration:none;
-    font-size:12px;
-    font-weight:600;
-    font-family:'Space Grotesk', sans-serif;
-    padding:6px 15px;
-    border-radius:16px;
-    border:1px solid #000000;
-    transition: opacity 0.15s ease, transform 0.1s ease;
-  }
-  footer.credit .follow-btn:hover{
-    opacity:0.8;
-    transform:translateY(-1px);
-  }
-</style>
+    .brand {
+      font-size: 25px;
+      font-weight: 800;
+      color: #24467f;
+      letter-spacing: -0.5px;
+    }
+
+    .date-text {
+      font-size: 13px;
+      color: #8999b8;
+    }
+
+    .main-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .mainnet {
+      grid-column: 3;
+      grid-row: 2;
+    }
+
+    .page-card {
+      --accent: #526de5;
+      --accent-soft: rgba(82, 109, 229, 0.08);
+
+      min-height: 400px;
+      padding: 20px;
+      border-radius: 19px;
+      background: #ffffff;
+      border: 1px solid #e4e9f2;
+      box-shadow: 0 8px 25px rgba(54, 78, 130, 0.04);
+    }
+
+    .task-hub {
+      --accent: #526de5;
+      --accent-soft: rgba(82, 109, 229, 0.08);
+    }
+
+    .daily-task {
+      --accent: #8b5cf6;
+      --accent-soft: rgba(139, 92, 246, 0.08);
+    }
+
+    .testnet {
+      --accent: #159b8c;
+      --accent-soft: rgba(21, 155, 140, 0.08);
+    }
+
+    .mainnet {
+      --accent: #c93ca5;
+      --accent-soft: rgba(201, 60, 165, 0.08);
+    }
+
+    .page-header {
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 14px;
+      border: 1.5px solid var(--accent);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .page-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .page-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .item-count {
+      color: var(--accent);
+      opacity: 0.65;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .page-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 18px 0 20px;
+    }
+
+    .action-btn {
+      height: 37px;
+      border-radius: 9px;
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .action-btn:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+
+    .items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 10px;
+      color: #a6b4cc;
+      font-size: 12px;
+    }
+
+    .link-item,
+    .folder-item {
+      width: 100%;
+      border: 1.5px solid var(--accent);
+      border-radius: 11px;
+      background: rgba(255, 255, 255, 0.8);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .link-item {
+      padding: 8px;
+    }
+
+    .link-item.dragging,
+    .folder-item.dragging {
+      opacity: 0.4;
+      transform: scale(0.98);
+    }
+
+    .link-item.drag-over,
+    .folder-item.drag-over {
+      border-style: dashed;
+      transform: translateY(-2px);
+    }
+
+    .link-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .drag-handle {
+      width: 18px;
+      min-width: 18px;
+      color: var(--accent);
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: -4px;
+      line-height: 1;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .drag-handle:active {
+      cursor: grabbing;
+    }
+
+    .website-logo {
+      width: 26px;
+      height: 26px;
+      min-width: 26px;
+      object-fit: contain;
+      border-radius: 6px;
+      padding: 3px;
+      background: #ffffff;
+      border: 1px solid #edf0f6;
+    }
+
+    .link-name {
+      flex: 1;
+      min-width: 0;
+      color: #4b6799;
+      font-size: 12px;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .link-buttons {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+
+    .link-btn {
+      height: 26px;
+      min-width: 47px;
+      padding: 0 8px;
+      border-radius: 7px;
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 9px;
+      font-weight: 700;
+      transition: opacity 0.2s ease;
+    }
+
+    .link-btn:hover {
+      opacity: 0.82;
+    }
+
+    .folder-item {
+      overflow: hidden;
+    }
+
+    .folder-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px;
+      min-width: 0;
+    }
+
+    .folder-icon {
+      font-size: 17px;
+      line-height: 1;
+    }
+
+    .folder-name {
+      flex: 1;
+      min-width: 0;
+      color: #4b6799;
+      font-size: 12px;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .folder-actions {
+      display: flex;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+
+    .folder-links {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      padding: 0 9px 9px;
+    }
+
+    .folder-empty {
+      color: #a6b4cc;
+      font-size: 10px;
+      padding: 2px 0 3px 26px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(30, 47, 82, 0.25);
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      width: min(400px, 100%);
+      padding: 24px;
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 20px 60px rgba(30, 50, 100, 0.2);
+    }
+
+    .modal h2 {
+      margin: 0 0 20px;
+      color: #29477f;
+      font-size: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      color: #6078a6;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .form-group input {
+      width: 100%;
+      height: 42px;
+      padding: 0 12px;
+      border: 1px solid #dce4f2;
+      border-radius: 9px;
+      outline: none;
+      color: #3d5d95;
+      font-size: 13px;
+    }
+
+    .form-group input:focus {
+      border-color: #8da4df;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .modal-btn {
+      height: 38px;
+      padding: 0 17px;
+      border-radius: 9px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .cancel-btn {
+      background: #edf1f8;
+      color: #6780ae;
+    }
+
+    .save-btn {
+      background: var(--modal-accent, #526de5);
+      color: #ffffff;
+    }
+
+    @media (max-width: 1100px) {
+      .main-content {
+        padding: 22px;
+      }
+
+      .top-header {
+        padding: 0 35px;
+      }
+
+      .page-card {
+        padding: 17px;
+      }
+
+      .grid {
+        gap: 18px;
+      }
+    }
+
+    @media (max-width: 800px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .mainnet {
+        grid-column: auto;
+        grid-row: auto;
+      }
+
+      .top-header {
+        padding: 0 24px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .top-header {
+        height: 70px;
+        padding: 0 18px;
+      }
+
+      .brand {
+        font-size: 20px;
+      }
+
+      .date-text {
+        font-size: 10px;
+      }
+
+      .main-content {
+        padding: 14px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .page-card {
+        min-height: auto;
+        padding: 16px;
+        border-radius: 16px;
+      }
+
+      .page-header {
+        height: 50px;
+      }
+
+      .empty-state {
+        padding: 35px 10px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div class="wrap">
-  <header class="top">
-    <div class="top-left">
-      <div class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Switch theme">
-        <span class="icon" id="icon-light">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12" r="5" fill="currentColor"/>
-            <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <line x1="12" y1="1" x2="12" y2="4"/>
-              <line x1="12" y1="20" x2="12" y2="23"/>
-              <line x1="1" y1="12" x2="4" y2="12"/>
-              <line x1="20" y1="12" x2="23" y2="12"/>
-              <line x1="4.2" y1="4.2" x2="6.3" y2="6.3"/>
-              <line x1="17.7" y1="17.7" x2="19.8" y2="19.8"/>
-              <line x1="4.2" y1="19.8" x2="6.3" y2="17.7"/>
-              <line x1="17.7" y1="6.3" x2="19.8" y2="4.2"/>
-            </g>
-          </svg>
-        </span>
-        <span class="icon" id="icon-dark">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" fill="currentColor"/>
-          </svg>
-        </span>
-      </div>
-      <h1>DAILY x HUB</h1>
-    </div>
-    <div class="date" id="today"></div>
-  </header>
 
-  <div class="main-layout">
-    <div class="menu-space" id="menu-space">
-      <div class="panel favdex" id="panel-favdex">
-        <div class="panel-head">
-          <span class="head-left"><span class="dot"></span><span class="name">Task Hub</span></span>
-          <span class="count" id="count-favdex">0 links</span>
-        </div>
-        <div class="add-row">
-          <input class="name-in" placeholder="Name" id="favdex-name">
-          <input class="url-in" placeholder="https://..." id="favdex-url">
-          <button onclick="addLink('favdex')">Add</button>
-        </div>
-        <div class="list" id="list-favdex"></div>
-      </div>
-    </div>
-    <div class="grid">
-      <!-- LEFT: Daily Task -->
-      <div class="panel task" id="panel-task">
-        <div class="panel-head">
-          <span class="head-left"><span class="dot"></span><span class="name">Daily Task</span></span>
-          <span class="count" id="count-task">0 links</span>
-        </div>
-        <div class="add-row">
-          <input class="name-in" placeholder="Name" id="task-name">
-          <input class="url-in" placeholder="https://..." id="task-url">
-          <button onclick="addLink('task')">Add</button>
-        </div>
-        <div class="list" id="list-task"></div>
+  <div class="app">
+
+    <header class="top-header">
+      <div class="brand">DAILY x HUB</div>
+      <div class="date-text" id="currentDate"></div>
+    </header>
+
+    <main class="main-content">
+
+      <div class="grid">
+
+        <!-- TASK HUB -->
+        <section class="page-card task-hub" data-section="taskHub">
+
+          <div class="page-header">
+            <div class="page-title">
+              <span class="page-dot"></span>
+              Task Hub
+            </div>
+            <div class="item-count" id="count-taskHub">0 items</div>
+          </div>
+
+          <div class="page-actions">
+            <button type="button" class="action-btn add-link-btn" data-section="taskHub">
+              + Add Link
+            </button>
+
+            <button type="button" class="action-btn create-folder-btn" data-section="taskHub">
+              + Create Folder
+            </button>
+          </div>
+
+          <div class="items-list" id="list-taskHub"></div>
+
+        </section>
+
+
+        <!-- DAILY TASK -->
+        <section class="page-card daily-task" data-section="dailyTask">
+
+          <div class="page-header">
+            <div class="page-title">
+              <span class="page-dot"></span>
+              Daily Task
+            </div>
+            <div class="item-count" id="count-dailyTask">0 items</div>
+          </div>
+
+          <div class="page-actions">
+            <button type="button" class="action-btn add-link-btn" data-section="dailyTask">
+              + Add Link
+            </button>
+
+            <button type="button" class="action-btn create-folder-btn" data-section="dailyTask">
+              + Create Folder
+            </button>
+          </div>
+
+          <div class="items-list" id="list-dailyTask"></div>
+
+        </section>
+
+
+        <!-- TESTNET -->
+        <section class="page-card testnet" data-section="testnet">
+
+          <div class="page-header">
+            <div class="page-title">
+              <span class="page-dot"></span>
+              Testnet
+            </div>
+            <div class="item-count" id="count-testnet">0 items</div>
+          </div>
+
+          <div class="page-actions">
+            <button type="button" class="action-btn add-link-btn" data-section="testnet">
+              + Add Link
+            </button>
+
+            <button type="button" class="action-btn create-folder-btn" data-section="testnet">
+              + Create Folder
+            </button>
+          </div>
+
+          <div class="items-list" id="list-testnet"></div>
+
+        </section>
+
+
+        <!-- MAINNET -->
+        <section class="page-card mainnet" data-section="mainnet">
+
+          <div class="page-header">
+            <div class="page-title">
+              <span class="page-dot"></span>
+              Mainnet
+            </div>
+            <div class="item-count" id="count-mainnet">0 items</div>
+          </div>
+
+          <div class="page-actions">
+            <button type="button" class="action-btn add-link-btn" data-section="mainnet">
+              + Add Link
+            </button>
+
+            <button type="button" class="action-btn create-folder-btn" data-section="mainnet">
+              + Create Folder
+            </button>
+          </div>
+
+          <div class="items-list" id="list-mainnet"></div>
+
+        </section>
+
       </div>
 
-      <!-- RIGHT: Testnet + Mainnet -->
-      <div class="right-col">
-        <div class="panel testnet" id="panel-testnet">
-          <div class="panel-head">
-            <span class="head-left"><span class="dot"></span><span class="name">Testnet</span></span>
-            <span class="count" id="count-testnet">0 links</span>
-          </div>
-          <div class="add-row">
-            <input class="name-in" placeholder="Name" id="testnet-name">
-            <input class="url-in" placeholder="https://..." id="testnet-url">
-            <button onclick="addLink('testnet')">Add</button>
-          </div>
-          <div class="list" id="list-testnet"></div>
-        </div>
+    </main>
 
-        <div class="panel mainnet" id="panel-mainnet">
-          <div class="panel-head">
-            <span class="head-left"><span class="dot"></span><span class="name">Mainnet</span></span>
-            <span class="count" id="count-mainnet">0 links</span>
-          </div>
-          <div class="add-row">
-            <input class="name-in" placeholder="Name" id="mainnet-name">
-            <input class="url-in" placeholder="https://..." id="mainnet-url">
-            <button onclick="addLink('mainnet')">Add</button>
-          </div>
-          <div class="list" id="list-mainnet"></div>
-        </div>
-      </div>
-    </div>
   </div>
 
-  <footer class="credit">
-    <span class="built-text">Built By</span>
-    <img class="avatar" src="dp.png" alt="Rehanx85R" onerror="this.onerror=null;this.src='https://unavatar.io/twitter/Rehanx85R'">
-    <span class="handle">@Rehanx85R</span>
-    <a class="follow-btn" href="https://x.com/Rehanx85R" target="_blank" rel="noopener noreferrer">Follow</a>
-  </footer>
-</div>
 
-<script>
-  const STORAGE_KEY = 'daily-hub-links-v1';
+  <!-- ADD LINK MODAL -->
+  <div class="modal-overlay" id="linkModal">
 
-  // In-memory data, hydrated from localStorage on load so links persist across visits
-  const data = {
-    task: [],
-    testnet: [],
-    mainnet: [],
-    favdex: []
-  };
+    <div class="modal">
 
-  function loadData(){
-    try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if(!raw) return;
-      const parsed = JSON.parse(raw);
-      ['task','testnet','mainnet','favdex'].forEach(section => {
-        if(Array.isArray(parsed[section])) data[section] = parsed[section];
-      });
-    }catch(e){
-      console.error('Could not load saved links:', e);
-    }
-  }
+      <h2>Add New Link</h2>
 
-  function saveData(){
-    try{
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    }catch(e){
-      console.error('Could not save links:', e);
-    }
-  }
-
-  // Tracks an in-progress drag reorder
-  let dragCtx = null; // { section, index, pointerId }
-
-  function normalizeUrl(u){
-    u = u.trim();
-    if(!u) return '';
-    if(!/^https?:\/\//i.test(u)) u = 'https://' + u;
-    return u;
-  }
-
-  function logoFor(url){
-    try{
-      const host = new URL(url).hostname.replace(/^www\./, '');
-      return `https://logo.clearbit.com/${host}`;
-    }catch(e){
-      return '';
-    }
-  }
-
-  function faviconFor(url){
-    try{
-      const host = new URL(url).hostname;
-      return `https://www.google.com/s2/favicons?sz=64&domain=${host}`;
-    }catch(e){
-      return '';
-    }
-  }
-
-  function addLink(section){
-    const nameEl = document.getElementById(section + '-name');
-    const urlEl = document.getElementById(section + '-url');
-    const name = nameEl.value.trim();
-    const url = normalizeUrl(urlEl.value);
-    if(!name || !url){
-      nameEl.style.borderColor = !name ? '#e15b5b' : 'var(--border)';
-      urlEl.style.borderColor = !url ? '#e15b5b' : 'var(--border)';
-      return;
-    }
-    data[section].push({name, url});
-    nameEl.value = '';
-    urlEl.value = '';
-    nameEl.style.borderColor = 'var(--border)';
-    urlEl.style.borderColor = 'var(--border)';
-    saveData();
-    render(section);
-  }
-
-  function removeLink(section, idx){
-    data[section].splice(idx, 1);
-    saveData();
-    render(section);
-  }
-
-  // --- Drag to reorder (works with mouse + touch via Pointer Events) ---
-  function onHandlePointerDown(ev, section, idx){
-    ev.preventDefault();
-    const handle = ev.currentTarget;
-    handle.setPointerCapture(ev.pointerId);
-    dragCtx = { section, index: idx, pointerId: ev.pointerId };
-    const row = handle.closest('.row');
-    if(row) row.classList.add('dragging');
-    document.addEventListener('pointermove', onDragPointerMove);
-    document.addEventListener('pointerup', onDragPointerUp);
-  }
-
-  function onDragPointerMove(ev){
-    if(!dragCtx) return;
-    const el = document.elementFromPoint(ev.clientX, ev.clientY);
-    const targetRow = el && el.closest ? el.closest('.row') : null;
-    if(!targetRow) return;
-    const list = document.getElementById('list-' + dragCtx.section);
-    if(!list || !list.contains(targetRow)) return;
-    const targetIdx = parseInt(targetRow.getAttribute('data-idx'), 10);
-    if(isNaN(targetIdx) || targetIdx === dragCtx.index) return;
-
-    const arr = data[dragCtx.section];
-    const [moved] = arr.splice(dragCtx.index, 1);
-    arr.splice(targetIdx, 0, moved);
-    dragCtx.index = targetIdx;
-    render(dragCtx.section);
-
-    const newRow = list.querySelector(`.row[data-idx="${targetIdx}"]`);
-    if(newRow) newRow.classList.add('dragging');
-  }
-
-  function onDragPointerUp(){
-    document.removeEventListener('pointermove', onDragPointerMove);
-    document.removeEventListener('pointerup', onDragPointerUp);
-    if(dragCtx){
-      saveData();
-      render(dragCtx.section);
-    }
-    dragCtx = null;
-  }
-
-  function render(section){
-    const list = document.getElementById('list-' + section);
-    const count = document.getElementById('count-' + section);
-    const items = data[section];
-    count.textContent = items.length + (items.length === 1 ? ' link' : ' links');
-
-    if(items.length === 0){
-      list.innerHTML = '';
-      return;
-    }
-
-    list.innerHTML = items.map((item, i) => `
-      <div class="row" data-idx="${i}">
-        <span class="drag-handle" onpointerdown="onHandlePointerDown(event, '${section}', ${i})">⠿</span>
-        <img class="favicon" src="${logoFor(item.url)}" data-fallback="${faviconFor(item.url)}" alt="" onerror="if(this.dataset.fallback && this.src!==this.dataset.fallback){this.src=this.dataset.fallback;} else {this.style.visibility='hidden';}">
-        <span class="row-name" title="${escapeAttr(item.name)}">${escapeHtml(item.name)}</span>
-        <div class="row-actions">
-          <a class="open-btn" href="${escapeAttr(item.url)}" target="_blank" rel="noopener noreferrer">Open</a>
-          <button class="del-btn" onclick="removeLink('${section}', ${i})">Delete</button>
-        </div>
+      <div class="form-group">
+        <label for="websiteName">Website Name</label>
+        <input
+          type="text"
+          id="websiteName"
+          placeholder="e.g. Axis Robotics"
+          autocomplete="off"
+        >
       </div>
-    `).join('');
-  }
 
-  function escapeHtml(str){
-    const d = document.createElement('div');
-    d.textContent = str;
-    return d.innerHTML;
-  }
+      <div class="form-group">
+        <label for="websiteUrl">Website URL</label>
+        <input
+          type="text"
+          id="websiteUrl"
+          placeholder="https://example.com"
+          autocomplete="off"
+        >
+      </div>
 
-  function escapeAttr(str){
-    return escapeHtml(str).replace(/"/g, '&quot;');
-  }
+      <div class="modal-actions">
+        <button type="button" class="modal-btn cancel-btn" id="cancelLinkBtn">
+          Cancel
+        </button>
 
-  function updateToggleUI(isDark){
-    document.getElementById('icon-light').classList.toggle('active', !isDark);
-    document.getElementById('icon-dark').classList.toggle('active', isDark);
-  }
+        <button type="button" class="modal-btn save-btn" id="saveLinkBtn">
+          Save Link
+        </button>
+      </div>
 
-  function toggleTheme(){
-    const isDark = document.body.classList.toggle('dark');
-    updateToggleUI(isDark);
-  }
+    </div>
 
-  loadData();
+  </div>
 
-  updateToggleUI(document.body.classList.contains('dark'));
 
-  ['task','testnet','mainnet','favdex'].forEach(render);
+  <!-- CREATE FOLDER MODAL -->
+  <div class="modal-overlay" id="folderModal">
 
-  document.getElementById('today').textContent = new Date().toLocaleDateString('en-IN', {
-    weekday:'long', year:'numeric', month:'long', day:'numeric'
-  });
+    <div class="modal">
 
-  // Allow Enter key to submit within a section
-  ['task','testnet','mainnet','favdex'].forEach(section => {
-    document.getElementById(section + '-url').addEventListener('keydown', e => {
-      if(e.key === 'Enter') addLink(section);
+      <h2>Create Folder</h2>
+
+      <div class="form-group">
+        <label for="folderName">Folder Name</label>
+        <input
+          type="text"
+          id="folderName"
+          placeholder="e.g. Important Projects"
+          autocomplete="off"
+        >
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="modal-btn cancel-btn" id="cancelFolderBtn">
+          Cancel
+        </button>
+
+        <button type="button" class="modal-btn save-btn" id="saveFolderBtn">
+          Create Folder
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+    const STORAGE_KEY = "daily_x_hub_data";
+
+    const defaultData = {
+      taskHub: [],
+      dailyTask: [],
+      testnet: [],
+      mainnet: []
+    };
+
+    let data = loadData();
+
+    let currentSection = null;
+    let currentFolderIndex = null;
+
+    let draggedElement = null;
+    let draggedType = null;
+    let draggedSection = null;
+    let draggedFolderIndex = null;
+    let draggedItemIndex = null;
+
+
+    /* DATE */
+
+    function setDate() {
+      const date = new Date();
+
+      document.getElementById("currentDate").textContent =
+        date.toLocaleDateString("en-US", {
+          weekday: "long",
+          month: "long",
+          day: "numeric",
+          year: "numeric"
+        });
+    }
+
+
+    /* STORAGE */
+
+    function loadData() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+
+        if (!saved) {
+          return structuredClone(defaultData);
+        }
+
+        const parsed = JSON.parse(saved);
+        const result = structuredClone(defaultData);
+
+        Object.keys(result).forEach(section => {
+
+          if (!Array.isArray(parsed[section])) return;
+
+          result[section] = parsed[section].map(item => {
+
+            if (item.type === "folder") {
+              return {
+                type: "folder",
+                name: item.name || "Untitled Folder",
+                links: Array.isArray(item.links)
+                  ? item.links.map(link => ({
+                      name: link.name || "Untitled Link",
+                      url: link.url || ""
+                    }))
+                  : []
+              };
+            }
+
+            return {
+              type: "link",
+              name: item.name || "Untitled Link",
+              url: item.url || ""
+            };
+          });
+
+        });
+
+        return result;
+
+      } catch (error) {
+        console.error("Storage error:", error);
+        return structuredClone(defaultData);
+      }
+    }
+
+
+    function saveData() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+
+    /* URL HELPERS */
+
+    function normalizeUrl(url) {
+      url = url.trim();
+
+      if (!url) return "";
+
+      if (!/^https?:\/\//i.test(url)) {
+        return "https://" + url;
+      }
+
+      return url;
+    }
+
+
+    function getHostname(url) {
+      try {
+        return new URL(url).hostname;
+      } catch {
+        return "";
+      }
+    }
+
+
+    function getFavicon(url) {
+      const hostname = getHostname(url);
+
+      if (!hostname) return "";
+
+      return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(hostname)}&sz=64`;
+    }
+
+
+    /* COUNT */
+
+    function countItems(items) {
+      let count = 0;
+
+      items.forEach(item => {
+        if (item.type === "folder") {
+          count += item.links.length;
+        } else {
+          count++;
+        }
+      });
+
+      return count;
+    }
+
+
+    /* RENDER */
+
+    function renderAll() {
+      Object.keys(data).forEach(section => {
+        renderSection(section);
+      });
+    }
+
+
+    function renderSection(section) {
+
+      const list = document.getElementById(`list-${section}`);
+      const count = document.getElementById(`count-${section}`);
+
+      list.innerHTML = "";
+
+      count.textContent = `${countItems(data[section])} items`;
+
+      if (data[section].length === 0) {
+
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.textContent = "No items yet";
+
+        list.appendChild(empty);
+        return;
+      }
+
+      data[section].forEach((item, index) => {
+
+        if (item.type === "folder") {
+
+          list.appendChild(
+            createFolderElement(section, index, item)
+          );
+
+        } else {
+
+          list.appendChild(
+            createLinkElement(section, item, index, null)
+          );
+
+        }
+
+      });
+
+    }
+
+
+    /* LINK ELEMENT */
+
+    function createLinkElement(section, link, linkIndex, folderIndex) {
+
+      const item = document.createElement("div");
+
+      item.className = "link-item";
+
+      const row = document.createElement("div");
+      row.className = "link-row";
+
+
+      const dragHandle = document.createElement("div");
+      dragHandle.className = "drag-handle";
+      dragHandle.textContent = "⠿";
+      dragHandle.title = "Drag to reorder";
+
+
+      const logo = document.createElement("img");
+      logo.className = "website-logo";
+      logo.src = getFavicon(link.url);
+      logo.alt = "";
+      logo.loading = "lazy";
+
+      logo.onerror = function () {
+        this.style.display = "none";
+      };
+
+
+      const name = document.createElement("div");
+      name.className = "link-name";
+      name.textContent = link.name;
+
+
+      const buttons = document.createElement("div");
+      buttons.className = "link-buttons";
+
+
+      const openBtn = document.createElement("button");
+      openBtn.type = "button";
+      openBtn.className = "link-btn";
+      openBtn.textContent = "Open";
+
+      openBtn.addEventListener("click", function(event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const url = normalizeUrl(link.url);
+
+        if (url) {
+          window.open(url, "_blank", "noopener,noreferrer");
+        }
+
+      });
+
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.type = "button";
+      deleteBtn.className = "link-btn";
+      deleteBtn.textContent = "Delete";
+
+      deleteBtn.addEventListener("click", function(event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        deleteLink(section, linkIndex, folderIndex);
+
+      });
+
+
+      buttons.appendChild(openBtn);
+      buttons.appendChild(deleteBtn);
+
+      row.appendChild(dragHandle);
+      row.appendChild(logo);
+      row.appendChild(name);
+      row.appendChild(buttons);
+
+      item.appendChild(row);
+
+
+      setupDragEvents(
+        item,
+        dragHandle,
+        "link",
+        section,
+        folderIndex,
+        linkIndex
+      );
+
+      return item;
+    }
+
+
+    /* FOLDER ELEMENT */
+
+    function createFolderElement(section, folderIndex, folder) {
+
+      const folderItem = document.createElement("div");
+
+      folderItem.className = "folder-item";
+
+
+      const header = document.createElement("div");
+      header.className = "folder-header";
+
+
+      const handle = document.createElement("div");
+      handle.className = "drag-handle";
+      handle.textContent = "⠿";
+      handle.title = "Drag to reorder folder";
+
+
+      const icon = document.createElement("div");
+      icon.className = "folder-icon";
+      icon.textContent = "📁";
+
+
+      const name = document.createElement("div");
+      name.className = "folder-name";
+      name.textContent = folder.name;
+
+
+      const actions = document.createElement("div");
+      actions.className = "folder-actions";
+
+
+      const addBtn = document.createElement("button");
+      addBtn.type = "button";
+      addBtn.className = "link-btn";
+      addBtn.textContent = "Add Link";
+
+      addBtn.addEventListener("click", function(event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        openLinkModal(section, folderIndex);
+
+      });
+
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.type = "button";
+      deleteBtn.className = "link-btn";
+      deleteBtn.textContent = "Delete Folder";
+
+      deleteBtn.addEventListener("click", function(event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        deleteFolder(section, folderIndex);
+
+      });
+
+
+      actions.appendChild(addBtn);
+      actions.appendChild(deleteBtn);
+
+      header.appendChild(handle);
+      header.appendChild(icon);
+      header.appendChild(name);
+      header.appendChild(actions);
+
+      folderItem.appendChild(header);
+
+
+      const folderLinks = document.createElement("div");
+      folderLinks.className = "folder-links";
+
+
+      if (folder.links.length === 0) {
+
+        const empty = document.createElement("div");
+        empty.className = "folder-empty";
+        empty.textContent = "No links in this folder";
+
+        folderLinks.appendChild(empty);
+
+      } else {
+
+        folder.links.forEach((link, linkIndex) => {
+
+          folderLinks.appendChild(
+            createLinkElement(
+              section,
+              link,
+              linkIndex,
+              folderIndex
+            )
+          );
+
+        });
+
+      }
+
+      folderItem.appendChild(folderLinks);
+
+
+      setupDragEvents(
+        folderItem,
+        handle,
+        "folder",
+        section,
+        null,
+        folderIndex
+      );
+
+      return folderItem;
+    }
+
+
+    /* DRAG EVENTS */
+
+    function setupDragEvents(
+      element,
+      handle,
+      type,
+      section,
+      folderIndex,
+      itemIndex
+    ) {
+
+      handle.draggable = true;
+
+
+      handle.addEventListener("dragstart", function(event) {
+
+        draggedElement = element;
+        draggedType = type;
+        draggedSection = section;
+        draggedFolderIndex = folderIndex;
+        draggedItemIndex = itemIndex;
+
+        element.classList.add("dragging");
+
+        event.dataTransfer.effectAllowed = "move";
+        event.dataTransfer.setData("text/plain", "drag");
+
+      });
+
+
+      handle.addEventListener("dragend", function() {
+
+        element.classList.remove("dragging");
+
+        document.querySelectorAll(".drag-over").forEach(el => {
+          el.classList.remove("drag-over");
+        });
+
+        draggedElement = null;
+        draggedType = null;
+        draggedSection = null;
+        draggedFolderIndex = null;
+        draggedItemIndex = null;
+
+      });
+
+
+      element.addEventListener("dragover", function(event) {
+
+        event.preventDefault();
+
+        if (!draggedElement || draggedElement === element) return;
+
+        if (draggedSection !== section) return;
+
+        if (draggedType !== type) return;
+
+        if (
+          type === "link" &&
+          draggedFolderIndex !== folderIndex
+        ) {
+          return;
+        }
+
+        element.classList.add("drag-over");
+
+        const rect = element.getBoundingClientRect();
+        const middle = rect.top + rect.height / 2;
+
+        if (event.clientY < middle) {
+
+          element.parentNode.insertBefore(
+            draggedElement,
+            element
+          );
+
+        } else {
+
+          element.parentNode.insertBefore(
+            draggedElement,
+            element.nextSibling
+          );
+
+        }
+
+      });
+
+
+      element.addEventListener("dragleave", function() {
+        element.classList.remove("drag-over");
+      });
+
+
+      element.addEventListener("drop", function(event) {
+
+        event.preventDefault();
+
+        if (!draggedElement) return;
+
+        element.classList.remove("drag-over");
+
+        reorderItems(
+          draggedSection,
+          draggedType,
+          draggedFolderIndex,
+          draggedItemIndex,
+          section,
+          folderIndex,
+          itemIndex
+        );
+
+      });
+
+    }
+
+
+    /* REORDER */
+
+    function reorderItems(
+      fromSection,
+      fromType,
+      fromFolderIndex,
+      fromItemIndex,
+      toSection,
+      toFolderIndex,
+      toItemIndex
+    ) {
+
+      if (fromSection !== toSection) return;
+
+
+      if (fromType === "link") {
+
+        if (fromFolderIndex !== toFolderIndex) return;
+
+        const collection =
+          fromFolderIndex === null
+            ? data[fromSection]
+            : data[fromSection][fromFolderIndex].links;
+
+        const [moved] = collection.splice(fromItemIndex, 1);
+
+        let newIndex = toItemIndex;
+
+        if (fromItemIndex < toItemIndex) {
+          newIndex--;
+        }
+
+        collection.splice(newIndex, 0, moved);
+      }
+
+
+      if (fromType === "folder") {
+
+        const [moved] = data[fromSection].splice(
+          fromItemIndex,
+          1
+        );
+
+        let newIndex = toItemIndex;
+
+        if (fromItemIndex < toItemIndex) {
+          newIndex--;
+        }
+
+        data[fromSection].splice(newIndex, 0, moved);
+      }
+
+
+      saveData();
+      renderAll();
+
+    }
+
+
+    /* LINK MODAL */
+
+    function openLinkModal(section, folderIndex = null) {
+
+      currentSection = section;
+      currentFolderIndex = folderIndex;
+
+      const modal = document.getElementById("linkModal");
+
+      const card = document.querySelector(
+        `.page-card[data-section="${section}"]`
+      );
+
+      const accent = getComputedStyle(card)
+        .getPropertyValue("--accent")
+        .trim();
+
+      modal.querySelector(".save-btn").style.setProperty(
+        "--modal-accent",
+        accent
+      );
+
+      document.getElementById("websiteName").value = "";
+      document.getElementById("websiteUrl").value = "";
+
+      modal.classList.add("active");
+
+      setTimeout(function() {
+        document.getElementById("websiteName").focus();
+      }, 100);
+
+    }
+
+
+    function closeLinkModal() {
+
+      document
+        .getElementById("linkModal")
+        .classList.remove("active");
+
+      currentSection = null;
+      currentFolderIndex = null;
+
+    }
+
+
+    function saveLink() {
+
+      const nameInput = document.getElementById("websiteName");
+      const urlInput = document.getElementById("websiteUrl");
+
+      const name = nameInput.value.trim();
+      const url = normalizeUrl(urlInput.value);
+
+      if (!name) {
+        alert("Please enter a website name.");
+        nameInput.focus();
+        return;
+      }
+
+      if (!url) {
+        alert("Please enter a website URL.");
+        urlInput.focus();
+        return;
+      }
+
+
+      if (currentFolderIndex === null) {
+
+        data[currentSection].push({
+          type: "link",
+          name,
+          url
+        });
+
+      } else {
+
+        data[currentSection][currentFolderIndex].links.push({
+          name,
+          url
+        });
+
+      }
+
+      saveData();
+      renderAll();
+      closeLinkModal();
+
+    }
+
+
+    /* FOLDER MODAL */
+
+    function openFolderModal(section) {
+
+      currentSection = section;
+
+      const modal = document.getElementById("folderModal");
+
+      const card = document.querySelector(
+        `.page-card[data-section="${section}"]`
+      );
+
+      const accent = getComputedStyle(card)
+        .getPropertyValue("--accent")
+        .trim();
+
+      modal.querySelector(".save-btn").style.setProperty(
+        "--modal-accent",
+        accent
+      );
+
+      document.getElementById("folderName").value = "";
+
+      modal.classList.add("active");
+
+      setTimeout(function() {
+        document.getElementById("folderName").focus();
+      }, 100);
+
+    }
+
+
+    function closeFolderModal() {
+
+      document
+        .getElementById("folderModal")
+        .classList.remove("active");
+
+      currentSection = null;
+
+    }
+
+
+    function saveFolder() {
+
+      const nameInput = document.getElementById("folderName");
+      const name = nameInput.value.trim();
+
+      if (!name) {
+        alert("Please enter a folder name.");
+        nameInput.focus();
+        return;
+      }
+
+      data[currentSection].push({
+        type: "folder",
+        name,
+        links: []
+      });
+
+      saveData();
+      renderAll();
+      closeFolderModal();
+
+    }
+
+
+    /* DELETE LINK */
+
+    function deleteLink(section, linkIndex, folderIndex = null) {
+
+      const shouldDelete = confirm(
+        "Are you sure you want to delete this link?"
+      );
+
+      if (!shouldDelete) return;
+
+
+      if (folderIndex === null) {
+
+        data[section].splice(linkIndex, 1);
+
+      } else {
+
+        if (
+          data[section][folderIndex] &&
+          Array.isArray(data[section][folderIndex].links)
+        ) {
+          data[section][folderIndex].links.splice(linkIndex, 1);
+        }
+
+      }
+
+      saveData();
+      renderAll();
+
+    }
+
+
+    /* DELETE FOLDER */
+
+    function deleteFolder(section, folderIndex) {
+
+      const shouldDelete = confirm(
+        "Delete this folder and all links inside it?"
+      );
+
+      if (!shouldDelete) return;
+
+      if (
+        data[section] &&
+        data[section][folderIndex]
+      ) {
+        data[section].splice(folderIndex, 1);
+      }
+
+      saveData();
+      renderAll();
+
+    }
+
+
+    /* MAIN BUTTONS */
+
+    document.querySelectorAll(".add-link-btn").forEach(function(button) {
+
+      button.addEventListener("click", function(event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        openLinkModal(button.dataset.section);
+
+      });
+
     });
-    document.getElementById(section + '-name').addEventListener('keydown', e => {
-      if(e.key === 'Enter') document.getElementById(section + '-url').focus();
+
+
+    document.querySelectorAll(".create-folder-btn").forEach(function(button) {
+
+      button.addEventListener("click", function(event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        openFolderModal(button.dataset.section);
+
+      });
+
     });
-  });
-</script>
+
+
+    /* MODAL EVENTS */
+
+    document
+      .getElementById("cancelLinkBtn")
+      .addEventListener("click", function(event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        closeLinkModal();
+
+      });
+
+
+    document
+      .getElementById("saveLinkBtn")
+      .addEventListener("click", function(event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        saveLink();
+
+      });
+
+
+    document
+      .getElementById("cancelFolderBtn")
+      .addEventListener("click", function(event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        closeFolderModal();
+
+      });
+
+
+    document
+      .getElementById("saveFolderBtn")
+      .addEventListener("click", function(event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        saveFolder();
+
+      });
+
+
+    /* ENTER KEY SUPPORT */
+
+    document
+      .getElementById("websiteName")
+      .addEventListener("keydown", function(event) {
+
+        if (event.key === "Enter") {
+          document.getElementById("websiteUrl").focus();
+        }
+
+      });
+
+
+    document
+      .getElementById("websiteUrl")
+      .addEventListener("keydown", function(event) {
+
+        if (event.key === "Enter") {
+          saveLink();
+        }
+
+      });
+
+
+    document
+      .getElementById("folderName")
+      .addEventListener("keydown", function(event) {
+
+        if (event.key === "Enter") {
+          saveFolder();
+        }
+
+      });
+
+
+    /* CLOSE MODALS OUTSIDE CLICK */
+
+    document
+      .getElementById("linkModal")
+      .addEventListener("click", function(event) {
+
+        if (event.target.id === "linkModal") {
+          closeLinkModal();
+        }
+
+      });
+
+
+    document
+      .getElementById("folderModal")
+      .addEventListener("click", function(event) {
+
+        if (event.target.id === "folderModal") {
+          closeFolderModal();
+        }
+
+      });
+
+
+    /* INITIALIZE */
+
+    setDate();
+    renderAll();
+
+  </script>
+
 </body>
 </html>
