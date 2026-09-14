@@ -11,10 +11,10 @@
     }
 
     :root {
-      --page-bg: #f5f7fc;
-      --header-bg: #ffffff;
+      --background: #f6f8fc;
       --text: #29477f;
-      --muted: #91a2c3;
+      --muted: #92a2c0;
+      --card-border: #e5eaf3;
     }
 
     html {
@@ -25,7 +25,7 @@
       margin: 0;
       min-height: 100vh;
       font-family: Arial, Helvetica, sans-serif;
-      background: var(--page-bg);
+      background: var(--background);
       color: var(--text);
     }
 
@@ -35,40 +35,43 @@
     }
 
     button {
-      cursor: pointer;
       border: none;
+      cursor: pointer;
     }
 
     .app {
-      width: 100%;
       min-height: 100vh;
-      background: var(--page-bg);
+      width: 100%;
     }
+
+    /* HEADER */
 
     .top-header {
       height: 82px;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       padding: 0 56px;
-      background: var(--header-bg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
       border-bottom: 1px solid #e7ebf3;
     }
 
     .brand {
+      color: #24467f;
       font-size: 25px;
       font-weight: 800;
-      color: #24467f;
       letter-spacing: -0.5px;
     }
 
     .date-text {
-      font-size: 13px;
       color: #8999b8;
+      font-size: 13px;
     }
 
+    /* MAIN LAYOUT */
+
     .main-content {
+      width: 100%;
       max-width: 1280px;
       margin: 0 auto;
       padding: 28px;
@@ -77,57 +80,78 @@
     .grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-rows: auto auto;
       gap: 24px;
-      align-items: start;
+      align-items: stretch;
+    }
+
+    /* REQUIRED LAYOUT
+       LEFT: Task Hub
+       CENTER: Testnet / Mainnet
+       RIGHT: Daily Task
+    */
+
+    .task-hub {
+      grid-column: 1;
+      grid-row: 1 / 3;
+    }
+
+    .testnet {
+      grid-column: 2;
+      grid-row: 1;
     }
 
     .mainnet {
-      grid-column: 3;
+      grid-column: 2;
       grid-row: 2;
     }
 
+    .daily-task {
+      grid-column: 3;
+      grid-row: 1 / 3;
+    }
+
+    /* PAGE COLORS */
+
     .page-card {
       --accent: #526de5;
-      --accent-soft: rgba(82, 109, 229, 0.08);
 
       min-height: 400px;
       padding: 20px;
-      border-radius: 19px;
       background: #ffffff;
-      border: 1px solid #e4e9f2;
+      border: 1px solid var(--card-border);
+      border-radius: 19px;
       box-shadow: 0 8px 25px rgba(54, 78, 130, 0.04);
     }
 
     .task-hub {
       --accent: #526de5;
-      --accent-soft: rgba(82, 109, 229, 0.08);
     }
 
     .daily-task {
       --accent: #8b5cf6;
-      --accent-soft: rgba(139, 92, 246, 0.08);
     }
 
     .testnet {
       --accent: #159b8c;
-      --accent-soft: rgba(21, 155, 140, 0.08);
     }
 
     .mainnet {
       --accent: #c93ca5;
-      --accent-soft: rgba(201, 60, 165, 0.08);
     }
+
+    /* PAGE HEADER */
 
     .page-header {
       height: 54px;
+      padding: 0 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 0 14px;
+      background: rgba(255, 255, 255, 0.7);
       border: 1.5px solid var(--accent);
       border-radius: 13px;
-      background: rgba(255, 255, 255, 0.7);
     }
 
     .page-title {
@@ -142,9 +166,9 @@
     .page-dot {
       width: 9px;
       height: 9px;
+      flex-shrink: 0;
       border-radius: 50%;
       background: var(--accent);
-      flex-shrink: 0;
     }
 
     .item-count {
@@ -153,6 +177,8 @@
       font-size: 11px;
       white-space: nowrap;
     }
+
+    /* MAIN BUTTONS */
 
     .page-actions {
       display: grid;
@@ -176,6 +202,8 @@
       transform: translateY(-1px);
     }
 
+    /* ITEMS */
+
     .items-list {
       display: flex;
       flex-direction: column;
@@ -183,18 +211,20 @@
     }
 
     .empty-state {
-      text-align: center;
       padding: 60px 10px;
+      text-align: center;
       color: #a6b4cc;
       font-size: 12px;
     }
 
+    /* LINK CARD */
+
     .link-item,
     .folder-item {
       width: 100%;
+      background: rgba(255, 255, 255, 0.8);
       border: 1.5px solid var(--accent);
       border-radius: 11px;
-      background: rgba(255, 255, 255, 0.8);
       transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
@@ -221,14 +251,16 @@
       min-width: 0;
     }
 
+    /* DRAG HANDLE */
+
     .drag-handle {
       width: 18px;
       min-width: 18px;
       color: var(--accent);
-      font-size: 17px;
+      font-size: 19px;
       font-weight: 900;
-      letter-spacing: -4px;
       line-height: 1;
+      letter-spacing: -4px;
       cursor: grab;
       user-select: none;
       touch-action: none;
@@ -238,13 +270,15 @@
       cursor: grabbing;
     }
 
+    /* WEBSITE LOGO */
+
     .website-logo {
-      width: 26px;
-      height: 26px;
-      min-width: 26px;
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
       object-fit: contain;
-      border-radius: 6px;
       padding: 3px;
+      border-radius: 6px;
       background: #ffffff;
       border: 1px solid #edf0f6;
     }
@@ -268,8 +302,8 @@
     }
 
     .link-btn {
-      height: 26px;
-      min-width: 47px;
+      height: 28px;
+      min-width: 48px;
       padding: 0 8px;
       border-radius: 7px;
       background: var(--accent);
@@ -283,6 +317,8 @@
       opacity: 0.82;
     }
 
+    /* PREMIUM FOLDER */
+
     .folder-item {
       overflow: hidden;
     }
@@ -291,13 +327,24 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 9px;
       min-width: 0;
+      padding: 9px;
     }
 
     .folder-icon {
-      font-size: 17px;
-      line-height: 1;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .folder-icon svg {
+      display: block;
+      width: 42px;
+      height: 42px;
+      overflow: visible;
     }
 
     .folder-name {
@@ -325,10 +372,12 @@
     }
 
     .folder-empty {
+      padding: 2px 0 3px 26px;
       color: #a6b4cc;
       font-size: 10px;
-      padding: 2px 0 3px 26px;
     }
+
+    /* MODALS */
 
     .modal-overlay {
       position: fixed;
@@ -349,8 +398,8 @@
     .modal {
       width: min(400px, 100%);
       padding: 24px;
-      border-radius: 18px;
       background: #ffffff;
+      border-radius: 18px;
       box-shadow: 0 20px 60px rgba(30, 50, 100, 0.2);
     }
 
@@ -376,9 +425,9 @@
       width: 100%;
       height: 42px;
       padding: 0 12px;
+      outline: none;
       border: 1px solid #dce4f2;
       border-radius: 9px;
-      outline: none;
       color: #3d5d95;
       font-size: 13px;
     }
@@ -412,36 +461,50 @@
       color: #ffffff;
     }
 
-    @media (max-width: 1100px) {
-      .main-content {
-        padding: 22px;
-      }
+    /* RESPONSIVE */
 
+    @media (max-width: 1100px) {
       .top-header {
         padding: 0 35px;
       }
 
-      .page-card {
-        padding: 17px;
+      .main-content {
+        padding: 22px;
       }
 
       .grid {
         gap: 18px;
+      }
+
+      .page-card {
+        padding: 17px;
       }
     }
 
     @media (max-width: 800px) {
       .grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: auto auto;
+      }
+
+      .task-hub {
+        grid-column: 1;
+        grid-row: 1 / 3;
+      }
+
+      .testnet {
+        grid-column: 2;
+        grid-row: 1;
       }
 
       .mainnet {
-        grid-column: auto;
-        grid-row: auto;
+        grid-column: 2;
+        grid-row: 2;
       }
 
-      .top-header {
-        padding: 0 24px;
+      .daily-task {
+        grid-column: 1 / 3;
+        grid-row: 3;
       }
     }
 
@@ -465,7 +528,16 @@
 
       .grid {
         grid-template-columns: 1fr;
+        grid-template-rows: auto;
         gap: 14px;
+      }
+
+      .task-hub,
+      .testnet,
+      .mainnet,
+      .daily-task {
+        grid-column: auto;
+        grid-row: auto;
       }
 
       .page-card {
@@ -482,6 +554,30 @@
         padding: 35px 10px;
       }
     }
+
+    /* SYNC & BACKUP */
+    .backup-bar {
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:8px;
+      margin-top:18px;
+      flex-wrap:wrap;
+    }
+    .backup-btn {
+      height:36px;
+      padding:0 12px;
+      border:1px solid #dce4f2;
+      border-radius:9px;
+      background:#fff;
+      color:#526b9c;
+      font-size:11px;
+      font-weight:700;
+    }
+    .backup-btn.primary { background:#526de5; border-color:#526de5; color:#fff; }
+    .backup-btn:hover { opacity:.85; }
+    .backup-status { width:100%; text-align:right; color:#92a2c0; font-size:10px; }
+
   </style>
 </head>
 
@@ -498,7 +594,7 @@
 
       <div class="grid">
 
-        <!-- TASK HUB -->
+        <!-- LEFT: TASK HUB -->
         <section class="page-card task-hub" data-section="taskHub">
 
           <div class="page-header">
@@ -506,15 +602,24 @@
               <span class="page-dot"></span>
               Task Hub
             </div>
-            <div class="item-count" id="count-taskHub">0 items</div>
+
+            <div class="item-count" id="count-taskHub">
+              0 items
+            </div>
           </div>
 
           <div class="page-actions">
-            <button type="button" class="action-btn add-link-btn" data-section="taskHub">
+            <button
+              type="button"
+              class="action-btn add-link-btn"
+              data-section="taskHub">
               + Add Link
             </button>
 
-            <button type="button" class="action-btn create-folder-btn" data-section="taskHub">
+            <button
+              type="button"
+              class="action-btn create-folder-btn"
+              data-section="taskHub">
               + Create Folder
             </button>
           </div>
@@ -524,33 +629,7 @@
         </section>
 
 
-        <!-- DAILY TASK -->
-        <section class="page-card daily-task" data-section="dailyTask">
-
-          <div class="page-header">
-            <div class="page-title">
-              <span class="page-dot"></span>
-              Daily Task
-            </div>
-            <div class="item-count" id="count-dailyTask">0 items</div>
-          </div>
-
-          <div class="page-actions">
-            <button type="button" class="action-btn add-link-btn" data-section="dailyTask">
-              + Add Link
-            </button>
-
-            <button type="button" class="action-btn create-folder-btn" data-section="dailyTask">
-              + Create Folder
-            </button>
-          </div>
-
-          <div class="items-list" id="list-dailyTask"></div>
-
-        </section>
-
-
-        <!-- TESTNET -->
+        <!-- CENTER TOP: TESTNET -->
         <section class="page-card testnet" data-section="testnet">
 
           <div class="page-header">
@@ -558,15 +637,24 @@
               <span class="page-dot"></span>
               Testnet
             </div>
-            <div class="item-count" id="count-testnet">0 items</div>
+
+            <div class="item-count" id="count-testnet">
+              0 items
+            </div>
           </div>
 
           <div class="page-actions">
-            <button type="button" class="action-btn add-link-btn" data-section="testnet">
+            <button
+              type="button"
+              class="action-btn add-link-btn"
+              data-section="testnet">
               + Add Link
             </button>
 
-            <button type="button" class="action-btn create-folder-btn" data-section="testnet">
+            <button
+              type="button"
+              class="action-btn create-folder-btn"
+              data-section="testnet">
               + Create Folder
             </button>
           </div>
@@ -576,7 +664,7 @@
         </section>
 
 
-        <!-- MAINNET -->
+        <!-- CENTER BOTTOM: MAINNET -->
         <section class="page-card mainnet" data-section="mainnet">
 
           <div class="page-header">
@@ -584,15 +672,24 @@
               <span class="page-dot"></span>
               Mainnet
             </div>
-            <div class="item-count" id="count-mainnet">0 items</div>
+
+            <div class="item-count" id="count-mainnet">
+              0 items
+            </div>
           </div>
 
           <div class="page-actions">
-            <button type="button" class="action-btn add-link-btn" data-section="mainnet">
+            <button
+              type="button"
+              class="action-btn add-link-btn"
+              data-section="mainnet">
               + Add Link
             </button>
 
-            <button type="button" class="action-btn create-folder-btn" data-section="mainnet">
+            <button
+              type="button"
+              class="action-btn create-folder-btn"
+              data-section="mainnet">
               + Create Folder
             </button>
           </div>
@@ -600,6 +697,49 @@
           <div class="items-list" id="list-mainnet"></div>
 
         </section>
+
+
+        <!-- RIGHT: DAILY TASK -->
+        <section class="page-card daily-task" data-section="dailyTask">
+
+          <div class="page-header">
+            <div class="page-title">
+              <span class="page-dot"></span>
+              Daily Task
+            </div>
+
+            <div class="item-count" id="count-dailyTask">
+              0 items
+            </div>
+          </div>
+
+          <div class="page-actions">
+            <button
+              type="button"
+              class="action-btn add-link-btn"
+              data-section="dailyTask">
+              + Add Link
+            </button>
+
+            <button
+              type="button"
+              class="action-btn create-folder-btn"
+              data-section="dailyTask">
+              + Create Folder
+            </button>
+          </div>
+
+          <div class="items-list" id="list-dailyTask"></div>
+
+        </section>
+
+
+      <div class="backup-bar" aria-label="Sync and backup">
+        <button type="button" class="backup-btn primary" id="exportBackupBtn">Export Backup</button>
+        <button type="button" class="backup-btn" id="importBackupBtn">Import Backup</button>
+        <input type="file" id="backupFileInput" accept=".json,application/json" hidden>
+        <div class="backup-status" id="backupStatus">Local data is saved automatically</div>
+      </div>
 
       </div>
 
@@ -609,6 +749,7 @@
 
 
   <!-- ADD LINK MODAL -->
+
   <div class="modal-overlay" id="linkModal">
 
     <div class="modal">
@@ -617,32 +758,40 @@
 
       <div class="form-group">
         <label for="websiteName">Website Name</label>
+
         <input
           type="text"
           id="websiteName"
           placeholder="e.g. Axis Robotics"
-          autocomplete="off"
-        >
+          autocomplete="off">
       </div>
 
       <div class="form-group">
         <label for="websiteUrl">Website URL</label>
+
         <input
           type="text"
           id="websiteUrl"
           placeholder="https://example.com"
-          autocomplete="off"
-        >
+          autocomplete="off">
       </div>
 
       <div class="modal-actions">
-        <button type="button" class="modal-btn cancel-btn" id="cancelLinkBtn">
+
+        <button
+          type="button"
+          class="modal-btn cancel-btn"
+          id="cancelLinkBtn">
           Cancel
         </button>
 
-        <button type="button" class="modal-btn save-btn" id="saveLinkBtn">
+        <button
+          type="button"
+          class="modal-btn save-btn"
+          id="saveLinkBtn">
           Save Link
         </button>
+
       </div>
 
     </div>
@@ -651,6 +800,7 @@
 
 
   <!-- CREATE FOLDER MODAL -->
+
   <div class="modal-overlay" id="folderModal">
 
     <div class="modal">
@@ -659,22 +809,30 @@
 
       <div class="form-group">
         <label for="folderName">Folder Name</label>
+
         <input
           type="text"
           id="folderName"
           placeholder="e.g. Important Projects"
-          autocomplete="off"
-        >
+          autocomplete="off">
       </div>
 
       <div class="modal-actions">
-        <button type="button" class="modal-btn cancel-btn" id="cancelFolderBtn">
+
+        <button
+          type="button"
+          class="modal-btn cancel-btn"
+          id="cancelFolderBtn">
           Cancel
         </button>
 
-        <button type="button" class="modal-btn save-btn" id="saveFolderBtn">
+        <button
+          type="button"
+          class="modal-btn save-btn"
+          id="saveFolderBtn">
           Create Folder
         </button>
+
       </div>
 
     </div>
@@ -726,19 +884,22 @@
         const saved = localStorage.getItem(STORAGE_KEY);
 
         if (!saved) {
-          return structuredClone(defaultData);
+          return JSON.parse(JSON.stringify(defaultData));
         }
 
         const parsed = JSON.parse(saved);
-        const result = structuredClone(defaultData);
+        const result = JSON.parse(JSON.stringify(defaultData));
 
         Object.keys(result).forEach(section => {
 
-          if (!Array.isArray(parsed[section])) return;
+          if (!Array.isArray(parsed[section])) {
+            return;
+          }
 
           result[section] = parsed[section].map(item => {
 
             if (item.type === "folder") {
+
               return {
                 type: "folder",
                 name: item.name || "Untitled Folder",
@@ -749,6 +910,7 @@
                     }))
                   : []
               };
+
             }
 
             return {
@@ -756,6 +918,7 @@
               name: item.name || "Untitled Link",
               url: item.url || ""
             };
+
           });
 
         });
@@ -763,8 +926,8 @@
         return result;
 
       } catch (error) {
-        console.error("Storage error:", error);
-        return structuredClone(defaultData);
+        console.error("Unable to load saved data:", error);
+        return JSON.parse(JSON.stringify(defaultData));
       }
     }
 
@@ -774,12 +937,14 @@
     }
 
 
-    /* URL HELPERS */
+    /* URL */
 
     function normalizeUrl(url) {
       url = url.trim();
 
-      if (!url) return "";
+      if (!url) {
+        return "";
+      }
 
       if (!/^https?:\/\//i.test(url)) {
         return "https://" + url;
@@ -801,9 +966,77 @@
     function getFavicon(url) {
       const hostname = getHostname(url);
 
-      if (!hostname) return "";
+      if (!hostname) {
+        return "";
+      }
 
-      return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(hostname)}&sz=64`;
+      return (
+        "https://www.google.com/s2/favicons?domain=" +
+        encodeURIComponent(hostname) +
+        "&sz=128"
+      );
+    }
+
+
+    /* PREMIUM FOLDER ICON */
+
+    function createPremiumFolderIcon() {
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "folder-icon";
+
+      wrapper.innerHTML = `
+        <svg
+          viewBox="0 0 64 64"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true">
+
+          <defs>
+            <linearGradient
+              id="premiumFolderGradient"
+              x1="0"
+              y1="0"
+              x2="1"
+              y2="1">
+
+              <stop offset="0%" stop-color="#FFE08A"/>
+              <stop offset="45%" stop-color="#FFC94F"/>
+              <stop offset="100%" stop-color="#F3A51F"/>
+
+            </linearGradient>
+          </defs>
+
+          <path
+            d="M5 18C5 14.7 7.7 12 11 12H25L31 19H53C56.3 19 59 21.7 59 25V50C59 53.3 56.3 56 53 56H11C7.7 56 5 53.3 5 50V18Z"
+            fill="url(#premiumFolderGradient)"
+            stroke="#E2A32A"
+            stroke-width="1.5"/>
+
+          <path
+            d="M5 23C5 19.7 7.7 17 11 17H53C56.3 17 59 19.7 59 23V27H5V23Z"
+            fill="#FFD86B"/>
+
+          <path
+            d="M7 27H57V49C57 51.2 55.2 53 53 53H11C8.8 53 7 51.2 7 49V27Z"
+            fill="url(#premiumFolderGradient)"/>
+
+          <path
+            d="M8 28H56"
+            stroke="#E8A82B"
+            stroke-width="1"
+            opacity="0.6"/>
+
+          <path
+            d="M13 20H25"
+            stroke="#FFE89A"
+            stroke-width="2"
+            stroke-linecap="round"
+            opacity="0.9"/>
+
+        </svg>
+      `;
+
+      return wrapper;
     }
 
 
@@ -813,11 +1046,13 @@
       let count = 0;
 
       items.forEach(item => {
+
         if (item.type === "folder") {
           count += item.links.length;
         } else {
           count++;
         }
+
       });
 
       return count;
@@ -849,6 +1084,7 @@
         empty.textContent = "No items yet";
 
         list.appendChild(empty);
+
         return;
       }
 
@@ -875,10 +1111,14 @@
 
     /* LINK ELEMENT */
 
-    function createLinkElement(section, link, linkIndex, folderIndex) {
+    function createLinkElement(
+      section,
+      link,
+      linkIndex,
+      folderIndex
+    ) {
 
       const item = document.createElement("div");
-
       item.className = "link-item";
 
       const row = document.createElement("div");
@@ -894,7 +1134,7 @@
       const logo = document.createElement("img");
       logo.className = "website-logo";
       logo.src = getFavicon(link.url);
-      logo.alt = "";
+      logo.alt = link.name;
       logo.loading = "lazy";
 
       logo.onerror = function () {
@@ -974,7 +1214,6 @@
     function createFolderElement(section, folderIndex, folder) {
 
       const folderItem = document.createElement("div");
-
       folderItem.className = "folder-item";
 
 
@@ -988,9 +1227,7 @@
       handle.title = "Drag to reorder folder";
 
 
-      const icon = document.createElement("div");
-      icon.className = "folder-icon";
-      icon.textContent = "📁";
+      const icon = createPremiumFolderIcon();
 
 
       const name = document.createElement("div");
@@ -1072,6 +1309,7 @@
 
       }
 
+
       folderItem.appendChild(folderLinks);
 
 
@@ -1139,11 +1377,17 @@
 
         event.preventDefault();
 
-        if (!draggedElement || draggedElement === element) return;
+        if (!draggedElement || draggedElement === element) {
+          return;
+        }
 
-        if (draggedSection !== section) return;
+        if (draggedSection !== section) {
+          return;
+        }
 
-        if (draggedType !== type) return;
+        if (draggedType !== type) {
+          return;
+        }
 
         if (
           type === "link" &&
@@ -1185,7 +1429,9 @@
 
         event.preventDefault();
 
-        if (!draggedElement) return;
+        if (!draggedElement) {
+          return;
+        }
 
         element.classList.remove("drag-over");
 
@@ -1216,12 +1462,16 @@
       toItemIndex
     ) {
 
-      if (fromSection !== toSection) return;
+      if (fromSection !== toSection) {
+        return;
+      }
 
 
       if (fromType === "link") {
 
-        if (fromFolderIndex !== toFolderIndex) return;
+        if (fromFolderIndex !== toFolderIndex) {
+          return;
+        }
 
         const collection =
           fromFolderIndex === null
@@ -1334,18 +1584,19 @@
 
         data[currentSection].push({
           type: "link",
-          name,
-          url
+          name: name,
+          url: url
         });
 
       } else {
 
         data[currentSection][currentFolderIndex].links.push({
-          name,
-          url
+          name: name,
+          url: url
         });
 
       }
+
 
       saveData();
       renderAll();
@@ -1408,11 +1659,13 @@
         return;
       }
 
+
       data[currentSection].push({
         type: "folder",
-        name,
+        name: name,
         links: []
       });
+
 
       saveData();
       renderAll();
@@ -1423,13 +1676,19 @@
 
     /* DELETE LINK */
 
-    function deleteLink(section, linkIndex, folderIndex = null) {
+    function deleteLink(
+      section,
+      linkIndex,
+      folderIndex = null
+    ) {
 
       const shouldDelete = confirm(
         "Are you sure you want to delete this link?"
       );
 
-      if (!shouldDelete) return;
+      if (!shouldDelete) {
+        return;
+      }
 
 
       if (folderIndex === null) {
@@ -1438,14 +1697,14 @@
 
       } else {
 
-        if (
-          data[section][folderIndex] &&
-          Array.isArray(data[section][folderIndex].links)
-        ) {
-          data[section][folderIndex].links.splice(linkIndex, 1);
+        const folder = data[section][folderIndex];
+
+        if (folder && Array.isArray(folder.links)) {
+          folder.links.splice(linkIndex, 1);
         }
 
       }
+
 
       saveData();
       renderAll();
@@ -1461,7 +1720,10 @@
         "Delete this folder and all links inside it?"
       );
 
-      if (!shouldDelete) return;
+      if (!shouldDelete) {
+        return;
+      }
+
 
       if (
         data[section] &&
@@ -1470,13 +1732,14 @@
         data[section].splice(folderIndex, 1);
       }
 
+
       saveData();
       renderAll();
 
     }
 
 
-    /* MAIN BUTTONS */
+    /* ADD LINK BUTTONS */
 
     document.querySelectorAll(".add-link-btn").forEach(function(button) {
 
@@ -1492,6 +1755,8 @@
     });
 
 
+    /* CREATE FOLDER BUTTONS */
+
     document.querySelectorAll(".create-folder-btn").forEach(function(button) {
 
       button.addEventListener("click", function(event) {
@@ -1506,7 +1771,7 @@
     });
 
 
-    /* MODAL EVENTS */
+    /* MODAL BUTTONS */
 
     document
       .getElementById("cancelLinkBtn")
@@ -1614,6 +1879,88 @@
 
       });
 
+
+
+    /* SYNC & BACKUP */
+    function updateBackupStatus(message) {
+      const status = document.getElementById("backupStatus");
+      if (status) status.textContent = message;
+    }
+
+    function exportBackup() {
+      const backup = {
+        app: "DAILY x HUB",
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        data: data
+      };
+      const blob = new Blob([JSON.stringify(backup, null, 2)], {
+        type: "application/json"
+      });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `daily-x-hub-backup-${new Date().toISOString().slice(0,10)}.json`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      updateBackupStatus("Backup exported successfully");
+    }
+
+    function importBackup(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        try {
+          const parsed = JSON.parse(event.target.result);
+          const imported = parsed.data || parsed;
+          const clean = JSON.parse(JSON.stringify(defaultData));
+
+          Object.keys(clean).forEach(section => {
+            if (!Array.isArray(imported[section])) return;
+            clean[section] = imported[section].map(item => {
+              if (item.type === "folder") {
+                return {
+                  type: "folder",
+                  name: item.name || "Untitled Folder",
+                  links: Array.isArray(item.links)
+                    ? item.links.map(link => ({
+                        name: link.name || "Untitled Link",
+                        url: normalizeUrl(link.url || "")
+                      }))
+                    : []
+                };
+              }
+              return {
+                type: "link",
+                name: item.name || "Untitled Link",
+                url: normalizeUrl(item.url || "")
+              };
+            });
+          });
+
+          if (!confirm("Import this backup and replace current data?")) return;
+          data = clean;
+          saveData();
+          renderAll();
+          updateBackupStatus("Backup imported successfully");
+        } catch (error) {
+          console.error(error);
+          alert("Invalid backup file. Please select a DAILY x HUB JSON backup.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    document.getElementById("exportBackupBtn").addEventListener("click", exportBackup);
+    document.getElementById("importBackupBtn").addEventListener("click", function() {
+      document.getElementById("backupFileInput").click();
+    });
+    document.getElementById("backupFileInput").addEventListener("change", function(event) {
+      importBackup(event.target.files[0]);
+      event.target.value = "";
+    });
 
     /* INITIALIZE */
 
