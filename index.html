@@ -2330,6 +2330,30 @@
     setDate();
     renderAll();
 
+
+    // Reliable click handling for Add Link and Create Folder buttons
+    document.addEventListener("click", function(event) {
+      const addLinkButton = event.target.closest(".add-link-btn");
+      if (addLinkButton) {
+        event.preventDefault();
+        event.stopPropagation();
+        openLinkModal(addLinkButton.dataset.section);
+        return;
+      }
+      const createFolderButton = event.target.closest(".create-folder-btn");
+      if (createFolderButton) {
+        event.preventDefault();
+        event.stopPropagation();
+        openFolderModal(createFolderButton.dataset.section);
+      }
+    }, true);
+
+    document.addEventListener("submit", function(event) {
+      event.preventDefault();
+      if (event.target.id === "linkForm") saveLink();
+      if (event.target.id === "folderForm") saveFolder();
+    });
+
   </script>
 
 </body>
